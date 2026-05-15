@@ -30,7 +30,6 @@ body {
 /* Green Square Style */
 .menu-toggle {
     background: transparent;
-    border: 2px solid #2ecc71; /* Visual indicator for your 'green square' */
     color: white;
     font-size: 2rem;
     cursor: pointer;
@@ -41,7 +40,7 @@ body {
 .logo-wrapper {
     display: flex;
     align-items: baseline;
-    border: 2px solid #000; /* Visual indicator for your 'black square' */
+    
 }
 
 .brand-logo {
@@ -57,7 +56,7 @@ body {
 
 /* Red Rectangle Style */
 .auth-links {
-    border: 2px solid #e74c3c; /* Visual indicator for your 'red rectangle' */
+    
     padding: 5px 10px;
     font-weight: 700;
 }
