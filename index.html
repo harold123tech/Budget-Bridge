@@ -10,37 +10,44 @@
 <body>
 
     <header class="navbar">
-        <div class="logo-container">
-            <span class="hamburger">&#9776;</span>
-            <h1 class="logo">Budget Bridge</h1>
+        <div class="left-section">
+            <button class="menu-toggle" id="menuBtn">
+                <span class="hamburger">&#9776;</span>
+            </button>
+            
+            <div class="logo-wrapper">
+                <img src="logo.png" alt="Budget Bridge Logo" class="brand-logo">
+                <h1 class="logo-text">udget Bridge</h1>
+            </div>
         </div>
+
         <div class="auth-links">
-            <a href="#">Login</a> / <a href="#">Register</a>
+            <a href="login.html">Login</a> / <a href="register.html" class="register-link">Register</a>
         </div>
     </header>
 
+    <nav class="side-menu" id="sideMenu">
+        <a href="#savings">Savings</a>
+        <a href="#budget">Budget</a>
+        <a href="#loans">Loans</a>
+    </nav>
+
     <main class="hero">
         <h2 class="hero-text">
-            Welcome to <span class="brand-blue">Budget Bridge</span>, a website where everyone will understand their finances.
+            Welcome to <span class="brand-accent">Budget Bridge</span>, a website where everyone will understand their finances.
         </h2>
-
-        <nav class="button-container">
-            <button class="nav-btn">
-                <span class="icon">🐷</span>
-                Savings
-            </button>
-            <button class="nav-btn">
-                <span class="icon">⚙️</span>
-                Budget
-            </button>
-            <button class="nav-btn">
-                <span class="icon">💰</span>
-                Loans
-            </button>
-        </nav>
     </main>
 
     <footer class="footer-bar"></footer>
 
+    <script>
+        // Simple script to toggle the menu
+        const menuBtn = document.getElementById('menuBtn');
+        const sideMenu = document.getElementById('sideMenu');
+
+        menuBtn.addEventListener('click', () => {
+            sideMenu.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>

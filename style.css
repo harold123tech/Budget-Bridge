@@ -1,49 +1,65 @@
-/* General Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #ffffff;
-    color: #000;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+:root {
+    --brand-color: #0097b2; /* Your exact color */
 }
 
-/* Header/Navbar */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
 .navbar {
-    background-color: #6197AC;
+    background-color: var(--brand-color);
     color: white;
-    padding: 10px 40px;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.logo-container {
+.left-section {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.hamburger {
+/* Green Square Style */
+.menu-toggle {
+    background: transparent;
+    border: 2px solid #2ecc71; /* Visual indicator for your 'green square' */
+    color: white;
     font-size: 2rem;
     cursor: pointer;
+    padding: 5px;
 }
 
-.logo {
+/* Black Square Style (Logo) */
+.logo-wrapper {
+    display: flex;
+    align-items: baseline;
+    border: 2px solid #000; /* Visual indicator for your 'black square' */
+}
+
+.brand-logo {
+    height: 45px; /* Adjust based on your image size */
+    display: block;
+}
+
+.logo-text {
     font-family: 'Lora', serif;
     font-size: 2.2rem;
-    font-weight: 700;
+    margin-left: -5px; /* Pulls text closer to logo image */
 }
 
+/* Red Rectangle Style */
 .auth-links {
+    border: 2px solid #e74c3c; /* Visual indicator for your 'red rectangle' */
+    padding: 5px 10px;
     font-weight: 700;
-    font-size: 1.1rem;
 }
 
 .auth-links a {
@@ -51,74 +67,41 @@ body {
     text-decoration: none;
 }
 
-/* Hero Section */
-.hero {
-    flex: 1;
-    padding: 60px 10%;
-    text-align: center;
-}
-
-.hero-text {
-    font-size: 3.5rem;
-    font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: 80px;
-    letter-spacing: -1px;
-}
-
-.brand-blue {
-    color: #6197AC;
-}
-
-/* Buttons */
-.button-container {
+/* Sidebar Menu Logic */
+.side-menu {
+    position: fixed;
+    left: -250px;
+    top: 60px;
+    width: 250px;
+    height: 100%;
+    background: #f4f4f4;
+    transition: 0.3s;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     display: flex;
-    justify-content: center;
-    gap: 100px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    padding: 20px;
 }
 
-.nav-btn {
-    background-color: #6197AC;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 12px;
-    font-size: 1.8rem;
+.side-menu.active {
+    left: 0;
+}
+
+.side-menu a {
+    text-decoration: none;
+    color: var(--brand-color);
+    padding: 15px 0;
     font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    cursor: pointer;
-    min-width: 250px;
-    transition: transform 0.2s ease;
+    border-bottom: 1px solid #ddd;
 }
 
-.nav-btn:hover {
-    background-color: #4e7d8f;
-    transform: scale(1.05);
+.brand-accent {
+    color: var(--brand-color);
 }
 
-.icon {
-    background: white;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-}
-
-/* Footer */
 .footer-bar {
-    height: 50px;
-    background-color: #6197AC;
+    position: fixed;
+    bottom: 0;
+    height: 40px;
+    background-color: var(--brand-color);
     width: 100%;
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-    .hero-text { font-size: 2rem; }
-    .button-container { gap: 20px; }
 }
