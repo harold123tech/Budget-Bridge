@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Bridge - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Lora:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="left-section">
+            <button class="menu-toggle" id="menuBtn">
+                <span class="hamburger">&#9776;</span>
+            </button>
+            
+            <div class="logo-wrapper">
+                <img src="images/logo.png" alt="Budget Bridge Logo" class="brand-logo">
+                <h1 class="logo-text">.udget Bridge</h1>
+            </div>
+        </div>
+
+        <div class="auth-links user-profile-display">
+            <span id="navUsername">Loading...</span>
+        </div>
+    </header>
+
+    <nav class="side-menu" id="sideMenu">
+        <a href="#savings">Savings</a>
+        <a href="#budget">Budget</a>
+        <a href="#loans">Loans</a>
+        <a href="#" id="logoutBtn" style="color: #e74c3c; margin-top: auto;">Log Out</a>
+    </nav>
+
+    <main class="hero">
+        <h2 class="hero-text">
+            Welcome <span class="brand-accent"><span id="heroUsername">User</span></span>, How can we help you today?
+        </h2>
+
+        <div class="bank-partners-space">
+            <p class="placeholder-text">[ Bank Partner Logos Will Go Here ]</p> 
+        </div>
+
+        <nav class="button-container">
+            <button class="nav-btn">
+                <span class="icon">🐷</span>
+                Savings
+            </button>
+            <button class="nav-btn">
+                <span class="icon">⚙️</span>
+                Budget
+            </button>
+            <button class="nav-btn">
+                <span class="icon">💰</span>
+                Loans
+            </button>
+        </nav>
+    </main>
+
+    <footer class="footer-bar"></footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <script>
+        // Use your live Firebase configurations
+        const firebaseConfig = {
+            apiKey: "AIzaSyDS5r7RaNUgOO4Q-koKj_7qhVknNhbSz8I",
+            authDomain: "budget-bridge-dc5ab.firebaseapp.com",
+            projectId: "budget-bridge-dc5ab",
+            storageBucket: "budget-bridge-dc5ab.firebasestorage.app",
+            messagingSenderId: "685535098423",
+            appId: "1:685535098423:web:5c8f388500524a3592b1b2",
+            measurementId: "G-DPMQ3P0LX5"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+
+        // UI Element Selectors
+        const menuBtn = document.getElementById('menuBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const navUsername = document.getElementById('navUsername');
+        const heroUsername = document.getElementById('heroUsername');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Toggle Navbar Side Drawer
+        menuBtn.addEventListener('click', () => {
+            sideMenu.classList.toggle('active');
+        });
+
+        // Firebase Auth Monitor: Checks who is logged in right now
+        // Firebase Auth Monitor: Checks who is logged in right now
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // --- UPDATED CODE HERE ---
+                // Pull the real name we saved during registration. 
+                // If it's missing for some reason, default back to "User"
+                const realName = user.displayName || "User";
+                
+                // Inject the real name seamlessly into your layout spaces
+                navUsername.textContent = realName;
+                heroUsername.textContent = realName;
+            } else {
+                // Kick out unauthorized guests back to home page safety
+                window.location.href = "index.html";
+            }
+        });
+
+        // Log out button controller logic
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            firebase.auth().signOut().then(() => {
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</body>
+</html>

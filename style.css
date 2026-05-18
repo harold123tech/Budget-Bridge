@@ -1,3 +1,6 @@
+/* ==========================================
+   1. GENERAL & LAYOUT STYLES
+   ========================================== */
 * {
     margin: 0;
     padding: 0;
@@ -5,13 +8,20 @@
 }
 
 :root {
-    --brand-color: #0097b2; /* Your exact color */
+    --brand-color: #4f91ab; /* Fixed back to your exact preferred color */
 }
 
 body {
     font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+/* ==========================================
+   2. NAVBAR STYLES (With layer fix)
+   ========================================== */
 .navbar {
     background-color: var(--brand-color);
     color: white;
@@ -19,6 +29,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative; 
+    z-index: 100; /* Stays securely on top of the side menu */
 }
 
 .left-section {
@@ -27,36 +39,35 @@ body {
     gap: 15px;
 }
 
-/* Green Square Style */
+/* Green Square Style Menu Toggle */
 .menu-toggle {
     background: transparent;
+    border: none;
     color: white;
     font-size: 2rem;
     cursor: pointer;
     padding: 5px;
 }
 
-/* Black Square Style (Logo) */
+/* Black Square Style (Logo Wrapper) */
 .logo-wrapper {
     display: flex;
     align-items: baseline;
-    
 }
 
 .brand-logo {
-    height: 45px; /* Adjust based on your image size */
+    height: 45px; 
     display: block;
 }
 
 .logo-text {
     font-family: 'Lora', serif;
     font-size: 2.2rem;
-    margin-left: -5px; /* Pulls text closer to logo image */
+    margin-left: -5px; 
 }
 
-/* Red Rectangle Style */
+/* Red Rectangle Style Auth links */
 .auth-links {
-    
     padding: 5px 10px;
     font-weight: 700;
 }
@@ -66,19 +77,22 @@ body {
     text-decoration: none;
 }
 
-/* Sidebar Menu Logic */
+/* ==========================================
+   3. SIDEBAR NAVIGATION MENU
+   ========================================== */
 .side-menu {
     position: fixed;
     left: -250px;
-    top: 60px;
+    top: 68px; /* Starts perfectly right below the navbar */
     width: 250px;
-    height: 100%;
+    height: calc(100vh - 68px); 
     background: #f4f4f4;
     transition: 0.3s;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     padding: 20px;
+    z-index: 99; /* Drops underneath the navbar layer */
 }
 
 .side-menu.active {
@@ -93,14 +107,178 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
+/* ==========================================
+   4. HERO CONTENT & MAIN BUTTONS 
+   ========================================== */
+.hero {
+    flex: 1;
+    padding: 60px 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: center;
+}
+
+.hero-text {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    max-width: 1200px;
+}
+
 .brand-accent {
     color: var(--brand-color);
 }
 
+/* Reserved Area for Bank Logos */
+.bank-partners-space {
+    width: 100%;
+    min-height: 150px; 
+    margin: 40px 0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px; 
+}
+
+.placeholder-text {
+    color: #aaa;
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+/* Main Buttons Layout */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 60px; 
+    flex-wrap: wrap;
+    width: 100%;
+    margin-bottom: 80px; 
+}
+
+.nav-btn {
+    background-color: var(--brand-color); 
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    min-width: 260px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-btn:hover {
+    filter: brightness(0.9); 
+    transform: translateY(-2px);
+}
+
+.icon {
+    background: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+/* ==========================================
+   5. FOOTER
+   ========================================== */
 .footer-bar {
     position: fixed;
     bottom: 0;
     height: 40px;
     background-color: var(--brand-color);
     width: 100%;
+}
+/* ==========================================
+   6. REGISTRATION PAGE STYLES (Mockup Design)
+   ========================================== */
+
+/* Fills the registration screen with your exact brand color */
+.register-body {
+    background-color: var(--brand-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* The card container in the center */
+.register-card {
+    background-color: #fdfdfa; /* Creamy off-white background matching the mockup */
+    width: 100%;
+    max-width: 650px;
+    padding: 40px;
+    border-radius: 4px; /* Subtle corners matching your design */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.logo-container {
+    margin-bottom: 15px;
+}
+
+.logo-img {
+    max-height: 80px; 
+    object-fit: contain;
+}
+
+/* "Register" heading text */
+.register-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #000000;
+    margin-bottom: 30px;
+    letter-spacing: -0.5px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+/* Input Fields: grey background, thick bold text labels, and large padded feel */
+.form-input {
+    width: 100%;
+    background-color: #e5e5e5; /* The grey placeholder strip color from your image */
+    border: none;
+    padding: 18px 24px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #8e8e8e; /* Placeholder style text color */
+    border-radius: 2px;
+    outline: none;
+    transition: background-color 0.2s ease;
+}
+
+/* Quick highlight effect when clicking into fields */
+.form-input:focus {
+    background-color: #dadada;
+    color: #333333;
+}
+.register-submit-btn {
+    width: 100%;
+    background-color: var(--brand-color);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.register-submit-btn:hover {
+    filter: brightness(0.9);
 }
