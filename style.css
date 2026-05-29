@@ -162,23 +162,46 @@ body {
 }
 
 .nav-card {
-    background-color: var(--brand-color); /* Starts Blue */
-    color: white; /* Starts White text */
-    width: 320px;
+    background-color: var(--brand-color);
+    color: white;
+    width: 340px;
+    height: 95px; /* Fixed default height to hide the questions initially */
     border-radius: 15px;
-    padding: 20px;
+    padding: 15px 20px;
     cursor: pointer;
-    transition: all 0.4s ease; /* Smooth transition for everything */
-    overflow: hidden;
+    transition: all 0.4s ease-in-out; 
+    overflow: hidden; /* Crucial! This hides everything outside the 95px box */
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     border: 3px solid var(--brand-color);
+    display: flex;
+    flex-direction: column;
 }
 
-.card-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    width: 100%;
+/* THE HOVER EFFECT: Growing the card box size and shifting colors */
+.nav-card:hover {
+    background-color: #ffffff; 
+    color: var(--brand-color); 
+    height: 280px; /* Expands the card box smoothly so the list shows */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* THE SLIDE MENU STRUCTURE */
+.question-list {
+    list-style: none;
+    margin-top: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    text-align: left;
+    padding-left: 5px;
+}
+
+/* Make the text list fade in beautifully when card scales up */
+.nav-card:hover .question-list {
+    opacity: 1;
+    visibility: visible;
+    margin-top: 25px;
 }
 
 .icon-circle {
