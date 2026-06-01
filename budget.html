@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="auth-layout.css">
     <link rel="stylesheet" href="educational-apps.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Lora:wght@700&display=swap" rel="stylesheet">
+
     <style>
         /* ── Page Shell ── */
         .tracker-page {
@@ -15,7 +16,7 @@
             padding: 36px 5%;
             display: flex;
             flex-direction: column;
-            gap: 32px;
+            gap: 28px;
         }
 
         /* ── Page Header ── */
@@ -32,11 +33,8 @@
             font-weight: 700;
             color: #111;
         }
-        .page-header-sub {
-            font-size: 0.92rem;
-            color: #777;
-            margin-top: 4px;
-        }
+        .page-header-sub { font-size: 0.92rem; color: #777; margin-top: 4px; }
+
         .add-btn-trigger {
             background: var(--brand-color);
             color: white;
@@ -59,351 +57,7 @@
             box-shadow: 0 6px 20px rgba(79,145,171,0.45);
         }
 
-        /* ── Metric Cards ── */
-        .metric-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-        @media (max-width: 700px) { .metric-row { grid-template-columns: 1fr; } }
-
-        .metric-card {
-            background: #1a2233;
-            border-radius: 50px;
-            padding: 28px 34px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 6px 22px rgba(0,0,0,0.14);
-            transition: transform 0.2s, box-shadow 0.2s;
-            overflow: hidden;
-            position: relative;
-        }
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: -40px;
-            right: -40px;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            opacity: 0.06;
-            background: white;
-        }
-        .metric-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        .metric-card.income  { background: linear-gradient(135deg, #1a2233 0%, #1e3a2f 100%); }
-        .metric-card.expense { background: linear-gradient(135deg, #1a2233 0%, #3a1e1e 100%); }
-        .metric-card.balance { background: linear-gradient(135deg, #1a2233 0%, #1a2a3a 100%); }
-
-        .metric-icon {
-            font-size: 2rem;
-            min-width: 52px;
-            height: 52px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .metric-body { flex: 1; min-width: 0; }
-        .metric-label {
-            font-size: 0.78rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: rgba(255,255,255,0.55);
-            margin-bottom: 5px;
-        }
-        .metric-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: white;
-            letter-spacing: -0.5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .metric-card.income  .metric-value { color: #4ade80; }
-        .metric-card.expense .metric-value { color: #f87171; }
-        .metric-card.balance .metric-value { color: #60a5fa; }
-
-        /* ── Modal Overlay ── */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.55);
-            z-index: 500;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-overlay.open { display: flex; }
-        .modal-box {
-            background: white;
-            border-radius: 20px;
-            padding: 40px 36px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-            position: relative;
-            animation: modalIn 0.22s ease;
-        }
-        @keyframes modalIn {
-            from { opacity: 0; transform: translateY(16px) scale(0.97); }
-            to   { opacity: 1; transform: translateY(0)   scale(1); }
-        }
-        .modal-close {
-            position: absolute;
-            top: 18px;
-            right: 22px;
-            background: #f0f0f0;
-            border: none;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            font-size: 1.1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.15s;
-        }
-        .modal-close:hover { background: #e0e0e0; }
-        .modal-title {
-            font-size: 1.45rem;
-            font-weight: 800;
-            color: #111;
-            margin-bottom: 28px;
-        }
-        .form-field {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-            margin-bottom: 20px;
-        }
-        .form-field label {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #444;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-        }
-        .form-field input,
-        .form-field select {
-            padding: 13px 16px;
-            border: 2px solid #e8e8e8;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            color: #222;
-            background: #fafafa;
-            outline: none;
-            transition: border-color 0.2s, background 0.2s;
-        }
-        .form-field input:focus,
-        .form-field select:focus {
-            border-color: var(--brand-color);
-            background: white;
-        }
-        .type-readonly {
-            padding: 13px 16px;
-            border: 2px solid #e8e8e8;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 700;
-            color: #e74c3c;
-            background: #fff5f5;
-        }
-        .form-submit-btn {
-            width: 100%;
-            padding: 15px;
-            background: var(--brand-color);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 800;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            margin-top: 8px;
-            transition: background 0.2s, transform 0.15s;
-        }
-        .form-submit-btn:hover { background: #3d7a93; transform: translateY(-1px); }
-        .form-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-        /* ── Two-Column Workspace ── */
-        .workspace {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-        @media (max-width: 860px) { .workspace { grid-template-columns: 1fr; } }
-
-        .panel {
-            background: white;
-            border-radius: 18px;
-            padding: 30px 28px;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
-        }
-        .panel-title {
-            font-size: 1.05rem;
-            font-weight: 800;
-            color: #111;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* ── Bar Chart ── */
-        .bar-chart { display: flex; flex-direction: column; gap: 20px; }
-        .bar-row { display: flex; flex-direction: column; gap: 8px; }
-        .bar-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.84rem;
-            font-weight: 700;
-            color: #444;
-        }
-        .bar-track {
-            height: 10px;
-            background: #f0f0f0;
-            border-radius: 50px;
-            overflow: hidden;
-            position: relative;
-        }
-        .bar-fill {
-            height: 100%;
-            border-radius: 50px;
-            transition: width 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 0%;
-        }
-        .bar-budget { background: rgba(79,145,171,0.3); }
-        .bar-actual { background: var(--brand-color); }
-        .bar-over   { background: #e74c3c; }
-        .bar-legend {
-            display: flex;
-            gap: 18px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-        .legend-dot {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: #666;
-        }
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-        .dot-budget { background: rgba(79,145,171,0.4); }
-        .dot-actual { background: var(--brand-color); }
-        .dot-over   { background: #e74c3c; }
-
-        /* ── Category Breakdown ── */
-        .category-list { display: flex; flex-direction: column; gap: 12px; }
-        .category-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px;
-            background: #f9f9f9;
-            border-radius: 12px;
-            transition: background 0.15s;
-        }
-        .category-item:hover { background: #f0f8fb; }
-        .cat-left { display: flex; align-items: center; gap: 12px; }
-        .cat-icon {
-            font-size: 1.4rem;
-            width: 40px;
-            height: 40px;
-            background: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
-        }
-        .cat-name { font-weight: 700; font-size: 0.95rem; color: #222; }
-        .cat-spent { font-weight: 800; font-size: 1.05rem; color: #e74c3c; }
-
-        /* ── Transaction Ledger ── */
-        .ledger-panel {
-            background: white;
-            border-radius: 18px;
-            padding: 30px 28px;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
-        }
-        .ledger-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 22px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .table-wrapper-ledger { overflow-x: auto; }
-        .ledger-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.91rem;
-            min-width: 560px;
-        }
-        .ledger-table thead tr {
-            border-bottom: 2px solid #f0f0f0;
-        }
-        .ledger-table thead th {
-            padding: 10px 14px;
-            text-align: left;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #999;
-        }
-        .ledger-table tbody tr {
-            border-bottom: 1px solid #f7f7f7;
-            transition: background 0.12s;
-        }
-        .ledger-table tbody tr:last-child { border-bottom: none; }
-        .ledger-table tbody tr:hover { background: #f9f9f9; }
-        .ledger-table td {
-            padding: 13px 14px;
-            color: #333;
-            vertical-align: middle;
-        }
-        .td-date  { color: #888; font-weight: 600; white-space: nowrap; }
-        .td-desc  { font-weight: 700; color: #111; }
-        .td-cat   {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            background: #e8f4f8;
-            color: var(--brand-color);
-            white-space: nowrap;
-        }
-        .td-type-expense { font-weight: 800; color: #e74c3c; }
-        .td-amount-expense { font-weight: 800; color: #e74c3c; }
-        .empty-ledger {
-            text-align: center;
-            padding: 50px 20px;
-            color: #bbb;
-            font-size: 0.95rem;
-        }
-        .empty-ledger span { font-size: 2.5rem; display: block; margin-bottom: 12px; }
-
-        /* ── Income input banner ── */
+        /* ── Income Banner ── */
         .income-banner {
             background: white;
             border-radius: 18px;
@@ -444,10 +98,380 @@
             font-family: 'Inter', sans-serif;
             cursor: pointer;
             white-space: nowrap;
-            transition: background 0.2s;
+            transition: background 0.2s, opacity 0.2s;
         }
-        .income-save-btn:hover { background: #3d7a93; }
+        .income-save-btn:hover:not(:disabled) { background: #3d7a93; }
+        .income-save-btn:disabled { opacity: 0.55; cursor: not-allowed; }
         .income-note { font-size: 0.82rem; color: #aaa; }
+
+        /* ── Metric Cards ── */
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        @media (max-width: 700px) { .metric-row { grid-template-columns: 1fr; } }
+
+        .metric-card {
+            border-radius: 50px;
+            padding: 28px 34px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.14);
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+            position: relative;
+        }
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            opacity: 0.06;
+            background: white;
+        }
+        .metric-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .metric-card.income  { background: linear-gradient(135deg, #1a2233 0%, #1e3a2f 100%); }
+        .metric-card.expense { background: linear-gradient(135deg, #1a2233 0%, #3a1e1e 100%); }
+        .metric-card.balance { background: linear-gradient(135deg, #1a2233 0%, #1a2a3a 100%); }
+
+        .metric-icon {
+            font-size: 2rem;
+            min-width: 52px; height: 52px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .metric-body { flex: 1; min-width: 0; }
+        .metric-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 5px;
+        }
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .metric-card.income  .metric-value { color: #4ade80; }
+        .metric-card.expense .metric-value { color: #f87171; }
+        .metric-card.balance .metric-value { color: #60a5fa; }
+        .metric-card.balance .metric-value.over-budget { color: #f87171; }
+
+        /* ── Two-Column Workspace ── */
+        .workspace {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 860px) { .workspace { grid-template-columns: 1fr; } }
+
+        .panel {
+            background: white;
+            border-radius: 18px;
+            padding: 30px 28px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+        }
+        .panel-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ── Progress Bar Chart ── */
+        .bar-chart { display: flex; flex-direction: column; gap: 18px; }
+
+        .bar-row { display: flex; flex-direction: column; gap: 7px; }
+
+        .bar-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #444;
+        }
+        .bar-meta-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+        .bar-pct-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #aaa;
+        }
+        .bar-warning-badge {
+            display: none;
+            font-size: 0.68rem;
+            font-weight: 800;
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 2px 7px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .bar-warning-badge.visible { display: inline-block; }
+
+        /* The track (grey background rail) */
+        .bar-track {
+            width: 100%;
+            height: 10px;
+            background: #f0f0f0;
+            border-radius: 50px;
+            overflow: hidden;
+            position: relative;
+        }
+        /* Budget target tick — positioned as a vertical line at the threshold % */
+        .bar-track-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 50px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+            width: 0%;
+            position: absolute;
+            top: 0; left: 0;
+        }
+        .bar-fill.normal  { background: var(--brand-color); }
+        .bar-fill.warning { background: #ef4444; }
+        .bar-fill.zero    { background: #e0e0e0; }
+
+        /* The target threshold tick mark */
+        .bar-target-tick {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: rgba(0,0,0,0.18);
+            border-radius: 2px;
+            z-index: 2;
+        }
+
+        .bar-legend {
+            display: flex;
+            gap: 18px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .legend-dot {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #666;
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-normal  { background: var(--brand-color); }
+        .dot-warning { background: #ef4444; }
+        .dot-target  { background: rgba(0,0,0,0.25); border-radius: 2px; width: 3px; height: 12px; }
+
+        /* ── Category Breakdown (right panel) ── */
+        .category-list { display: flex; flex-direction: column; gap: 10px; }
+        .category-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            transition: background 0.15s;
+        }
+        .category-item:hover { background: #f0f8fb; }
+        .cat-left { display: flex; align-items: center; gap: 10px; }
+        .cat-icon {
+            font-size: 1.3rem;
+            width: 38px; height: 38px;
+            background: white;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+            flex-shrink: 0;
+        }
+        .cat-name { font-weight: 700; font-size: 0.93rem; color: #222; }
+        .cat-right { text-align: right; }
+        .cat-spent { font-weight: 800; font-size: 1rem; color: #e74c3c; }
+        .cat-of-income { font-size: 0.74rem; color: #aaa; font-weight: 600; margin-top: 1px; }
+        .cat-warning { color: #dc2626; font-size: 0.72rem; font-weight: 800; margin-top: 2px; }
+
+        /* ── Transaction Ledger ── */
+        .ledger-panel {
+            background: white;
+            border-radius: 18px;
+            padding: 30px 28px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+        }
+        .ledger-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .table-wrapper-ledger { overflow-x: auto; }
+        .ledger-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.91rem;
+            min-width: 560px;
+        }
+        .ledger-table thead tr { border-bottom: 2px solid #f0f0f0; }
+        .ledger-table thead th {
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #999;
+        }
+        .ledger-table tbody tr {
+            border-bottom: 1px solid #f7f7f7;
+            transition: background 0.12s;
+        }
+        .ledger-table tbody tr:last-child { border-bottom: none; }
+        .ledger-table tbody tr:hover { background: #f9f9f9; }
+        .ledger-table td { padding: 12px 14px; color: #333; vertical-align: middle; }
+        .td-date  { color: #888; font-weight: 600; white-space: nowrap; }
+        .td-desc  { font-weight: 700; color: #111; }
+        .td-cat {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            background: #e8f4f8;
+            color: var(--brand-color);
+            white-space: nowrap;
+        }
+        .td-type-expense  { font-weight: 800; color: #e74c3c; }
+        .td-amount-expense { font-weight: 800; color: #e74c3c; text-align: right; }
+        .empty-ledger { text-align: center; padding: 50px 20px; color: #bbb; font-size: 0.95rem; }
+        .empty-ledger span { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 36px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            position: relative;
+            animation: modalIn 0.2s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(14px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-close {
+            position: absolute;
+            top: 16px; right: 20px;
+            background: #f0f0f0;
+            border: none;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+        }
+        .modal-close:hover { background: #e0e0e0; }
+        .modal-title { font-size: 1.4rem; font-weight: 800; color: #111; margin-bottom: 26px; }
+
+        .form-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+        .form-field label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .form-field input,
+        .form-field select {
+            padding: 12px 15px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            color: #222;
+            background: #fafafa;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .form-field input:focus,
+        .form-field select:focus { border-color: var(--brand-color); background: white; }
+        .type-readonly {
+            padding: 12px 15px;
+            border: 2px solid #ffe4e4;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #e74c3c;
+            background: #fff5f5;
+        }
+        .form-error {
+            font-size: 0.82rem;
+            color: #dc2626;
+            font-weight: 700;
+            margin-top: -10px;
+            margin-bottom: 6px;
+            display: none;
+        }
+        .form-error.visible { display: block; }
+        .form-submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--brand-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 800;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: background 0.2s, transform 0.15s, opacity 0.2s;
+        }
+        .form-submit-btn:hover:not(:disabled) { background: #3d7a93; transform: translateY(-1px); }
+        .form-submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
     </style>
 </head>
 <body>
@@ -461,7 +485,7 @@
                 <h1 class="logo-text">udget Bridge</h1>
             </div>
         </div>
-        <div class="auth-links user-profile-display">
+        <div class="auth-links">
             <span id="navUsername">Loading...</span>
         </div>
     </header>
@@ -474,29 +498,29 @@
         <a href="#" id="logoutBtn" style="color:#e74c3c;margin-top:auto;">Log Out</a>
     </nav>
 
-    <!-- ── MAIN TRACKER PAGE ── -->
+    <!-- ── MAIN ── -->
     <main class="tracker-page">
 
-        <!-- Page Header -->
+        <!-- Page Title Row -->
         <div class="page-header">
             <div>
                 <div class="page-header-title">Budget Tracker</div>
                 <div class="page-header-sub">Real-time personal finance dashboard</div>
             </div>
-            <button class="add-btn-trigger" id="openModalBtn">+ Add Transaction</button>
+            <button class="add-btn-trigger" id="openModalBtn">+ Add Expense</button>
         </div>
 
-        <!-- Monthly Income Input -->
+        <!-- Income Setting Banner -->
         <div class="income-banner">
             <label for="monthlyIncomeInput">Monthly Income</label>
             <div class="income-input-wrap">
                 <input type="number" id="monthlyIncomeInput" placeholder="e.g. 3500" min="0" step="0.01">
-                <button class="income-save-btn" id="saveIncomeBtn">Save</button>
+                <button class="income-save-btn" id="saveIncomeBtn">Save Income</button>
             </div>
-            <span class="income-note">Set your income so your remaining balance stays accurate.</span>
+            <span class="income-note">Sets your Total Income card and scales the progress bars.</span>
         </div>
 
-        <!-- 3 Metric Cards -->
+        <!-- 3 Summary Cards -->
         <div class="metric-row">
             <div class="metric-card income">
                 <div class="metric-icon">💵</div>
@@ -521,28 +545,24 @@
             </div>
         </div>
 
-        <!-- Two-Column Workspace -->
+        <!-- Two-Column Analytics -->
         <div class="workspace">
 
-            <!-- Left: Bar Chart -->
+            <!-- Left: Progress Bar Chart -->
             <div class="panel">
                 <div class="panel-title">📊 Budget vs Actual</div>
-                <div class="bar-chart" id="barChart">
-                    <!-- populated by JS -->
-                </div>
-                <div class="bar-legend" style="margin-top:20px;">
-                    <div class="legend-dot"><div class="dot dot-budget"></div>Budget (25% of income)</div>
-                    <div class="legend-dot"><div class="dot dot-actual"></div>Actual Spent</div>
-                    <div class="legend-dot"><div class="dot dot-over"></div>Over Budget</div>
+                <div class="bar-chart" id="barChart"></div>
+                <div class="bar-legend">
+                    <div class="legend-dot"><div class="dot dot-normal"></div>On track</div>
+                    <div class="legend-dot"><div class="dot dot-warning"></div>Over target</div>
+                    <div class="legend-dot"><div class="dot dot-target"></div>Target threshold</div>
                 </div>
             </div>
 
             <!-- Right: Category Breakdown -->
             <div class="panel">
                 <div class="panel-title">🗂️ Spending by Category</div>
-                <div class="category-list" id="categoryList">
-                    <!-- populated by JS -->
-                </div>
+                <div class="category-list" id="categoryList"></div>
             </div>
 
         </div>
@@ -560,18 +580,15 @@
                             <th>Description</th>
                             <th>Category</th>
                             <th>Type</th>
-                            <th>Amount</th>
+                            <th style="text-align:right;">Amount</th>
                         </tr>
                     </thead>
                     <tbody id="ledgerBody">
-                        <tr>
-                            <td colspan="5">
-                                <div class="empty-ledger">
-                                    <span>📋</span>
-                                    No transactions yet. Add one to get started.
-                                </div>
-                            </td>
-                        </tr>
+                        <tr><td colspan="5">
+                            <div class="empty-ledger">
+                                <span>📋</span>No transactions yet. Add one to get started.
+                            </div>
+                        </td></tr>
                     </tbody>
                 </table>
             </div>
@@ -581,11 +598,11 @@
 
     <footer class="footer-bar"></footer>
 
-    <!-- ── ADD TRANSACTION MODAL ── -->
+    <!-- ── ADD EXPENSE MODAL ── -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-box">
             <button class="modal-close" id="closeModalBtn" aria-label="Close">✕</button>
-            <div class="modal-title">Add Transaction</div>
+            <div class="modal-title">Add Expense</div>
 
             <div class="form-field">
                 <label for="txDate">Date</label>
@@ -615,59 +632,69 @@
                 <label for="txAmount">Amount ($)</label>
                 <input type="number" id="txAmount" placeholder="0.00" min="0.01" step="0.01">
             </div>
-
+            <p class="form-error" id="formError"></p>
             <button class="form-submit-btn" id="submitTxBtn">Add Transaction</button>
         </div>
     </div>
 
-    <!-- ── FIREBASE SDK ── -->
+    <!-- ── FIREBASE SDK (compat v10) ── -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
-        // ── Firebase Init ──────────────────────────────────────────────────────
+        /* ═══════════════════════════════════════════════════════════════════════
+           FIREBASE INIT
+        ═══════════════════════════════════════════════════════════════════════ */
         firebase.initializeApp({
-            apiKey: "AIzaSyDS5r7RaNUgOO4Q-koKj_7qhVknNhbSz8I",
-            authDomain: "budget-bridge-dc5ab.firebaseapp.com",
-            databaseURL: "https://budget-bridge-dc5ab-default-rtdb.firebaseio.com",
-            projectId: "budget-bridge-dc5ab",
-            storageBucket: "budget-bridge-dc5ab.firebasestorage.app",
+            apiKey:            "AIzaSyDS5r7RaNUgOO4Q-koKj_7qhVknNhbSz8I",
+            authDomain:        "budget-bridge-dc5ab.firebaseapp.com",
+            databaseURL:       "https://budget-bridge-dc5ab-default-rtdb.firebaseio.com",
+            projectId:         "budget-bridge-dc5ab",
+            storageBucket:     "budget-bridge-dc5ab.firebasestorage.app",
             messagingSenderId: "685535098423",
-            appId: "1:685535098423:web:5c8f388500524a3592b1b2"
+            appId:             "1:685535098423:web:5c8f388500524a3592b1b2"
         });
 
         const auth = firebase.auth();
         const db   = firebase.database();
 
-        // ── Category config ────────────────────────────────────────────────────
+        /* ═══════════════════════════════════════════════════════════════════════
+           CATEGORY CONFIG
+           budgetPct  = ideal share of monthly income (used to draw the target tick)
+           housingRule = the 30% housing rule triggers a warning badge when exceeded
+        ═══════════════════════════════════════════════════════════════════════ */
         const CATEGORIES = [
-            { name: 'Housing',       icon: '🏠', budgetPct: 0.30 },
-            { name: 'Food',          icon: '🍔', budgetPct: 0.15 },
-            { name: 'Transport',     icon: '🚗', budgetPct: 0.15 },
-            { name: 'Utilities',     icon: '💡', budgetPct: 0.10 },
-            { name: 'Entertainment', icon: '🎬', budgetPct: 0.10 },
-            { name: 'Other',         icon: '📦', budgetPct: 0.20 },
+            { name: 'Housing',       icon: '🏠', budgetPct: 0.30, housingRule: true  },
+            { name: 'Food',          icon: '🍔', budgetPct: 0.15, housingRule: false },
+            { name: 'Transport',     icon: '🚗', budgetPct: 0.15, housingRule: false },
+            { name: 'Utilities',     icon: '💡', budgetPct: 0.10, housingRule: false },
+            { name: 'Entertainment', icon: '🎬', budgetPct: 0.10, housingRule: false },
+            { name: 'Other',         icon: '📦', budgetPct: 0.20, housingRule: false },
         ];
 
-        // ── Helpers ────────────────────────────────────────────────────────────
+        /* ═══════════════════════════════════════════════════════════════════════
+           UTILITY FUNCTIONS
+        ═══════════════════════════════════════════════════════════════════════ */
         const fmt = n =>
             '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        function formatDate(iso) {
+        function fmtDate(iso) {
             if (!iso) return '—';
             const [y, m, d] = iso.split('-');
             const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
             return `${months[+m - 1]} ${+d}, ${y}`;
         }
 
-        function escapeHtml(s) {
-            return String(s)
+        function safe(s) {
+            return String(s ?? '—')
                 .replace(/&/g,'&amp;').replace(/</g,'&lt;')
                 .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
 
-        // ── DOM references ─────────────────────────────────────────────────────
+        /* ═══════════════════════════════════════════════════════════════════════
+           DOM REFERENCES
+        ═══════════════════════════════════════════════════════════════════════ */
         const menuBtn          = document.getElementById('menuBtn');
         const sideMenu         = document.getElementById('sideMenu');
         const logoutBtn        = document.getElementById('logoutBtn');
@@ -675,109 +702,154 @@
         const closeModalBtn    = document.getElementById('closeModalBtn');
         const modalOverlay     = document.getElementById('modalOverlay');
         const submitTxBtn      = document.getElementById('submitTxBtn');
+        const formError        = document.getElementById('formError');
         const saveIncomeBtn    = document.getElementById('saveIncomeBtn');
         const monthlyIncomeInp = document.getElementById('monthlyIncomeInput');
 
-        // ── Sidebar ────────────────────────────────────────────────────────────
+        /* ═══════════════════════════════════════════════════════════════════════
+           SIDEBAR
+        ═══════════════════════════════════════════════════════════════════════ */
         menuBtn.addEventListener('click', () => sideMenu.classList.toggle('active'));
 
-        // ── Modal ──────────────────────────────────────────────────────────────
+        /* ═══════════════════════════════════════════════════════════════════════
+           MODAL HELPERS
+        ═══════════════════════════════════════════════════════════════════════ */
         function openModal() {
             document.getElementById('txDate').value     = new Date().toISOString().slice(0, 10);
             document.getElementById('txDesc').value     = '';
             document.getElementById('txCategory').value = '';
             document.getElementById('txAmount').value   = '';
+            formError.classList.remove('visible');
+            formError.textContent = '';
             modalOverlay.classList.add('open');
         }
-        function closeModal() { modalOverlay.classList.remove('open'); }
+        function closeModal() {
+            modalOverlay.classList.remove('open');
+        }
 
         openModalBtn.addEventListener('click', openModal);
         closeModalBtn.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
 
-        // ── Auth gate — attach one unified listener per session ────────────────
-        let userDataListener = null;
+        /* ═══════════════════════════════════════════════════════════════════════
+           AUTH GATE
+           — onAuthStateChanged fires once on load and again on token refresh.
+           — We guard the listener block so it attaches exactly once.
+        ═══════════════════════════════════════════════════════════════════════ */
+        let activeListener = null;   // reference to the detach function
 
         auth.onAuthStateChanged(user => {
-            if (!user) { window.location.href = 'login.html'; return; }
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
             document.getElementById('navUsername').textContent = user.displayName || 'User';
 
-            // Register the unified listener exactly once
-            if (userDataListener) return;
-            const userRef = db.ref(`users/${user.uid}`);
-
-            userDataListener = userRef.on('value', snap => {
-                const data         = snap.val() || {};
-                const monthlyIncome = parseFloat(data.settings?.monthlyIncome) || 0;
-                const txRaw        = data.transactions || {};
-
-                // Populate income input field from DB value
-                monthlyIncomeInp.value = monthlyIncome > 0 ? monthlyIncome : '';
-
-                // Build sorted transaction array (newest date first)
-                const transactions = Object.entries(txRaw)
-                    .map(([id, t]) => ({ id, ...t }))
-                    .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                rebuildDashboard(monthlyIncome, transactions);
-
-            }, err => console.error('Firebase data error:', err.code, err.message));
+            // Only attach the real-time listener once
+            if (activeListener) return;
+            activeListener = attachUnifiedListener(user.uid);
         });
 
         logoutBtn.addEventListener('click', e => {
             e.preventDefault();
-            if (userDataListener) {
-                db.ref(`users/${auth.currentUser?.uid}`).off('value', userDataListener);
-                userDataListener = null;
+            const uid = auth.currentUser?.uid;
+            if (uid && activeListener) {
+                db.ref(`users/${uid}`).off('value', activeListener);
+                activeListener = null;
             }
-            auth.signOut().then(() => window.location.href = 'index.html');
+            auth.signOut().then(() => { window.location.href = 'index.html'; });
         });
 
-        // ── Save Income → users/${uid}/settings/monthlyIncome ─────────────────
+        /* ═══════════════════════════════════════════════════════════════════════
+           UNIFIED REAL-TIME LISTENER  →  users/${uid}
+           Reads both settings.monthlyIncome and transactions in a single snapshot.
+        ═══════════════════════════════════════════════════════════════════════ */
+        function attachUnifiedListener(uid) {
+            const ref      = db.ref(`users/${uid}`);
+            const handler  = ref.on('value',
+                snap => {
+                    const data          = snap.val() || {};
+                    const monthlyIncome = parseFloat(data.settings?.monthlyIncome) || 0;
+                    const txRaw         = data.transactions || {};
+
+                    // Reflect saved income back into the input field
+                    monthlyIncomeInp.value = monthlyIncome > 0 ? monthlyIncome : '';
+
+                    // Build sorted array — newest date first
+                    const transactions = Object.entries(txRaw)
+                        .map(([id, t]) => ({ id, ...t }))
+                        .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                    rebuildDashboard(monthlyIncome, transactions);
+                },
+                err => {
+                    console.error('[Firebase] Listener error —', err.code, err.message);
+                }
+            );
+            return handler;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════
+           SAVE INCOME  →  users/${uid}/settings/monthlyIncome
+        ═══════════════════════════════════════════════════════════════════════ */
         saveIncomeBtn.addEventListener('click', async e => {
             e.preventDefault();
-            const user = auth.currentUser;
-            if (!user) { alert('Not logged in.'); return; }
 
-            const val = parseFloat(monthlyIncomeInp.value);
-            if (isNaN(val) || val < 0) {
-                alert('Please enter a valid income amount.');
+            const user = auth.currentUser;
+            if (!user) {
+                console.error('[Auth] No authenticated user — cannot save income.');
+                alert('Session expired. Please log in again.');
+                return;
+            }
+
+            const raw = parseFloat(monthlyIncomeInp.value);
+            if (isNaN(raw) || raw < 0) {
+                alert('Please enter a valid income amount greater than zero.');
                 return;
             }
 
             saveIncomeBtn.textContent = 'Saving…';
             saveIncomeBtn.disabled    = true;
+
             try {
-                await db.ref(`users/${user.uid}/settings/monthlyIncome`).set(val);
+                await db.ref(`users/${user.uid}/settings/monthlyIncome`).set(raw);
+                // Input field will be refreshed by the onValue listener automatically
             } catch (err) {
-                console.error('Income save failed:', err.code, err.message);
-                alert('Could not save income: ' + err.message);
+                console.error('[Firebase] Income write failed —', err.code, err.message);
+                alert(`Could not save income.\nCode: ${err.code}\nReason: ${err.message}`);
             } finally {
-                saveIncomeBtn.textContent = 'Save';
+                saveIncomeBtn.textContent = 'Save Income';
                 saveIncomeBtn.disabled    = false;
             }
         });
 
-        // ── Add Transaction → users/${uid}/transactions ────────────────────────
+        /* ═══════════════════════════════════════════════════════════════════════
+           ADD TRANSACTION  →  users/${uid}/transactions
+        ═══════════════════════════════════════════════════════════════════════ */
         submitTxBtn.addEventListener('click', async e => {
             e.preventDefault();
+
+            // Validate auth before touching the DB
             const user = auth.currentUser;
             if (!user) {
-                console.error('No authenticated user at submit time.');
-                alert('You must be logged in to add a transaction.');
+                console.error('[Auth] No authenticated user — cannot add transaction.');
+                showFormError('Session expired. Please log in again.');
                 return;
             }
 
+            // Read and validate inputs
             const date        = document.getElementById('txDate').value.trim();
             const description = document.getElementById('txDesc').value.trim();
             const category    = document.getElementById('txCategory').value;
             const amount      = parseFloat(document.getElementById('txAmount').value);
 
             if (!date || !description || !category || isNaN(amount) || amount <= 0) {
-                alert('Please fill in all fields with a valid amount.');
+                showFormError('Please fill in all fields with a valid positive amount.');
                 return;
             }
 
+            hideFormError();
             submitTxBtn.disabled    = true;
             submitTxBtn.textContent = 'Saving…';
 
@@ -787,43 +859,56 @@
                     description,
                     category,
                     type:      'Expense',
-                    amount:    parseFloat(amount.toFixed(2)), // stored as number
+                    amount:    parseFloat(amount.toFixed(2)),   // stored as a number
                     createdAt: Date.now()
                 });
 
-                // Clear all form inputs immediately on success
+                // Clear every form field immediately on success
                 document.getElementById('txDate').value     = '';
                 document.getElementById('txDesc').value     = '';
                 document.getElementById('txCategory').value = '';
                 document.getElementById('txAmount').value   = '';
                 closeModal();
-                // No manual UI update needed — the unified onValue listener fires automatically
+                // No manual UI update needed — onValue fires and rebuilds everything
 
             } catch (err) {
-                console.error('Transaction write failed:', err.code, err.message);
-                alert('Error saving transaction: ' + err.message);
+                console.error('[Firebase] Transaction write failed —', err.code, err.message);
+                showFormError(`Save failed: ${err.message} (${err.code})`);
             } finally {
                 submitTxBtn.disabled    = false;
                 submitTxBtn.textContent = 'Add Transaction';
             }
         });
 
-        // ── Master dashboard rebuild ───────────────────────────────────────────
+        function showFormError(msg) {
+            formError.textContent = msg;
+            formError.classList.add('visible');
+        }
+        function hideFormError() {
+            formError.textContent = '';
+            formError.classList.remove('visible');
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════
+           DASHBOARD REBUILD
+           Called every time the onValue listener fires.
+        ═══════════════════════════════════════════════════════════════════════ */
         function rebuildDashboard(monthlyIncome, transactions) {
 
-            // 1. Calculate totals
-            const totalExpenses = transactions.reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-            const remaining     = monthlyIncome - totalExpenses;
+            /* 1 ── Summary card math ── */
+            const totalExpenses = transactions.reduce(
+                (sum, t) => sum + parseFloat(t.amount || 0), 0
+            );
+            const remaining = monthlyIncome - totalExpenses;
 
-            // 2. Update metric cards
             document.getElementById('cardIncome').textContent  = fmt(monthlyIncome);
             document.getElementById('cardExpense').textContent = fmt(totalExpenses);
 
             const balanceEl = document.getElementById('cardBalance');
-            balanceEl.textContent = (remaining < 0 ? '-' : '') + fmt(remaining);
-            balanceEl.style.color = remaining < 0 ? '#f87171' : '#60a5fa';
+            balanceEl.textContent = (remaining < 0 ? '−' : '') + fmt(remaining);
+            balanceEl.className   = 'metric-value' + (remaining < 0 ? ' over-budget' : '');
 
-            // 3. Aggregate by category
+            /* 2 ── Aggregate category totals ── */
             const catTotals = {};
             CATEGORIES.forEach(c => { catTotals[c.name] = 0; });
             transactions.forEach(t => {
@@ -831,65 +916,100 @@
                 catTotals[key] += parseFloat(t.amount || 0);
             });
 
-            // 4. Render charts, breakdown list, and ledger
+            /* 3 ── Render progress bars ── */
             renderBarChart(catTotals, monthlyIncome);
-            renderCategoryList(catTotals);
+
+            /* 4 ── Render category breakdown list ── */
+            renderCategoryList(catTotals, monthlyIncome);
+
+            /* 5 ── Render ledger ── */
             renderLedger(transactions);
         }
 
-        // ── Budget vs Actual bar chart ─────────────────────────────────────────
+        /* ═══════════════════════════════════════════════════════════════════════
+           PROGRESS BAR CHART
+           Fill width  = (amountSpent / monthlyIncome) * 100 — capped at 100 %
+           Target tick = category.budgetPct * 100 (e.g. Housing = 30 %)
+           Warning     = fill turns red when actual > budgetPct of income
+        ═══════════════════════════════════════════════════════════════════════ */
         function renderBarChart(catTotals, income) {
             const container = document.getElementById('barChart');
             container.innerHTML = '';
 
             CATEGORIES.forEach(cat => {
                 const actual    = catTotals[cat.name] || 0;
-                const budget    = income * cat.budgetPct;
-                // Scale bars relative to the largest value visible, floor at 1 to avoid ÷0
-                const ceiling   = Math.max(...Object.values(catTotals), ...CATEGORIES.map(c => income * c.budgetPct), 1);
-                const budgetPct = Math.min((budget / ceiling) * 100, 100).toFixed(1);
-                const actualPct = Math.min((actual / ceiling) * 100, 100).toFixed(1);
-                const isOver    = actual > budget && budget > 0;
+                const target    = income * cat.budgetPct;              // dollar target
+                const fillPct   = income > 0
+                    ? Math.min((actual / income) * 100, 100)
+                    : 0;
+                const tickPct   = cat.budgetPct * 100;                 // always a fixed %
+                const isOver    = actual > target && income > 0;
+
+                // Housing-specific 30% rule badge
+                const showHousingAlert = cat.housingRule && isOver;
+
+                const fillClass = actual === 0 ? 'zero' : (isOver ? 'warning' : 'normal');
 
                 const row = document.createElement('div');
                 row.className = 'bar-row';
                 row.innerHTML = `
                     <div class="bar-meta">
                         <span>${cat.icon} ${cat.name}</span>
-                        <span style="color:${isOver ? '#e74c3c' : '#444'}">
-                            ${fmt(actual)} / ${income > 0 ? fmt(budget) : '—'}
-                        </span>
+                        <div class="bar-meta-right">
+                            <span class="bar-pct-label">${fillPct.toFixed(1)}% of income</span>
+                            <span class="bar-warning-badge${showHousingAlert ? ' visible' : ''}">
+                                Over 30% Rule
+                            </span>
+                        </div>
                     </div>
-                    <div class="bar-track" style="margin-bottom:4px;" title="Budget: ${fmt(budget)}">
-                        <div class="bar-fill bar-budget" style="width:${budgetPct}%;opacity:0.55;"></div>
-                    </div>
-                    <div class="bar-track" title="Actual: ${fmt(actual)}">
-                        <div class="bar-fill ${isOver ? 'bar-over' : 'bar-actual'}" style="width:${actualPct}%;"></div>
+                    <div class="bar-track">
+                        <div class="bar-track-inner">
+                            <div class="bar-fill ${fillClass}"
+                                 style="width:${fillPct.toFixed(2)}%;"
+                                 title="${cat.name}: ${fmt(actual)} spent"></div>
+                            <div class="bar-target-tick"
+                                 style="left:${Math.min(tickPct, 99.5)}%;"
+                                 title="Target: ${tickPct}% (${fmt(target)})"></div>
+                        </div>
                     </div>`;
                 container.appendChild(row);
             });
         }
 
-        // ── Category spending breakdown ────────────────────────────────────────
-        function renderCategoryList(catTotals) {
+        /* ═══════════════════════════════════════════════════════════════════════
+           CATEGORY BREAKDOWN LIST (right panel)
+        ═══════════════════════════════════════════════════════════════════════ */
+        function renderCategoryList(catTotals, income) {
             const container = document.getElementById('categoryList');
             container.innerHTML = '';
 
             CATEGORIES.forEach(cat => {
-                const spent = catTotals[cat.name] || 0;
-                const item  = document.createElement('div');
+                const spent    = catTotals[cat.name] || 0;
+                const target   = income * cat.budgetPct;
+                const pctOfInc = income > 0 ? ((spent / income) * 100).toFixed(1) : '0.0';
+                const isOver   = spent > target && income > 0;
+                const showWarn = cat.housingRule && isOver;
+
+                const item = document.createElement('div');
                 item.className = 'category-item';
                 item.innerHTML = `
                     <div class="cat-left">
                         <div class="cat-icon">${cat.icon}</div>
                         <div class="cat-name">${cat.name}</div>
                     </div>
-                    <div class="cat-spent">${spent > 0 ? fmt(spent) : '—'}</div>`;
+                    <div class="cat-right">
+                        <div class="cat-spent">${spent > 0 ? fmt(spent) : '—'}</div>
+                        <div class="cat-of-income">${pctOfInc}% of income</div>
+                        ${showWarn ? '<div class="cat-warning">⚠ Exceeds 30% target</div>' : ''}
+                    </div>`;
                 container.appendChild(item);
             });
         }
 
-        // ── Transaction ledger ─────────────────────────────────────────────────
+        /* ═══════════════════════════════════════════════════════════════════════
+           TRANSACTION LEDGER
+           Sorted newest → oldest by date (done upstream in attachUnifiedListener)
+        ═══════════════════════════════════════════════════════════════════════ */
         function renderLedger(transactions) {
             const tbody = document.getElementById('ledgerBody');
             tbody.innerHTML = '';
@@ -907,9 +1027,9 @@
             transactions.forEach(t => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="td-date">${formatDate(t.date)}</td>
-                    <td class="td-desc">${escapeHtml(t.description || '—')}</td>
-                    <td><span class="td-cat">${escapeHtml(t.category || 'Other')}</span></td>
+                    <td class="td-date">${fmtDate(t.date)}</td>
+                    <td class="td-desc">${safe(t.description)}</td>
+                    <td><span class="td-cat">${safe(t.category || 'Other')}</span></td>
                     <td class="td-type-expense">Expense</td>
                     <td class="td-amount-expense">−${fmt(parseFloat(t.amount || 0))}</td>`;
                 tbody.appendChild(tr);
