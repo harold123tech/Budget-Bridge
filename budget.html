@@ -640,19 +640,34 @@
         const auth = firebase.auth();
         const db   = firebase.database();
 
-        // ── Constants ──────────────────────────────────────────────────────────
+        // ── Category config ────────────────────────────────────────────────────
         const CATEGORIES = [
-            { name: 'Housing',       icon: '🏠' },
-            { name: 'Food',          icon: '🍔' },
-            { name: 'Transport',     icon: '🚗' },
-            { name: 'Utilities',     icon: '💡' },
-            { name: 'Entertainment', icon: '🎬' },
-            { name: 'Other',         icon: '📦' },
+            { name: 'Housing',       icon: '🏠', budgetPct: 0.30 },
+            { name: 'Food',          icon: '🍔', budgetPct: 0.15 },
+            { name: 'Transport',     icon: '🚗', budgetPct: 0.15 },
+            { name: 'Utilities',     icon: '💡', budgetPct: 0.10 },
+            { name: 'Entertainment', icon: '🎬', budgetPct: 0.10 },
+            { name: 'Other',         icon: '📦', budgetPct: 0.20 },
         ];
 
-        const fmt = n => '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        // ── Helpers ────────────────────────────────────────────────────────────
+        const fmt = n =>
+            '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        // ── DOM Refs ───────────────────────────────────────────────────────────
+        function formatDate(iso) {
+            if (!iso) return '—';
+            const [y, m, d] = iso.split('-');
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            return `${months[+m - 1]} ${+d}, ${y}`;
+        }
+
+        function escapeHtml(s) {
+            return String(s)
+                .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        // ── DOM references ─────────────────────────────────────────────────────
         const menuBtn          = document.getElementById('menuBtn');
         const sideMenu         = document.getElementById('sideMenu');
         const logoutBtn        = document.getElementById('logoutBtn');
@@ -663,10 +678,10 @@
         const saveIncomeBtn    = document.getElementById('saveIncomeBtn');
         const monthlyIncomeInp = document.getElementById('monthlyIncomeInput');
 
-        // ── Sidebar toggle ─────────────────────────────────────────────────────
+        // ── Sidebar ────────────────────────────────────────────────────────────
         menuBtn.addEventListener('click', () => sideMenu.classList.toggle('active'));
 
-        // ── Modal helpers ──────────────────────────────────────────────────────
+        // ── Modal ──────────────────────────────────────────────────────────────
         function openModal() {
             document.getElementById('txDate').value     = new Date().toISOString().slice(0, 10);
             document.getElementById('txDesc').value     = '';
@@ -676,119 +691,186 @@
         }
         function closeModal() { modalOverlay.classList.remove('open'); }
 
-        openModalBtn.addEventListener('click',  openModal);
+        openModalBtn.addEventListener('click', openModal);
         closeModalBtn.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
 
-        // ── Auth Gate ──────────────────────────────────────────────────────────
-        let listenersAttached = false;
+        // ── Auth gate — attach one unified listener per session ────────────────
+        let userDataListener = null;
 
         auth.onAuthStateChanged(user => {
             if (!user) { window.location.href = 'login.html'; return; }
             document.getElementById('navUsername').textContent = user.displayName || 'User';
-            // Guard: only register listeners once per session to prevent duplicate handlers
-            if (!listenersAttached) {
-                listenersAttached = true;
-                attachListeners(user.uid);
-            }
+
+            // Register the unified listener exactly once
+            if (userDataListener) return;
+            const userRef = db.ref(`users/${user.uid}`);
+
+            userDataListener = userRef.on('value', snap => {
+                const data         = snap.val() || {};
+                const monthlyIncome = parseFloat(data.settings?.monthlyIncome) || 0;
+                const txRaw        = data.transactions || {};
+
+                // Populate income input field from DB value
+                monthlyIncomeInp.value = monthlyIncome > 0 ? monthlyIncome : '';
+
+                // Build sorted transaction array (newest date first)
+                const transactions = Object.entries(txRaw)
+                    .map(([id, t]) => ({ id, ...t }))
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                rebuildDashboard(monthlyIncome, transactions);
+
+            }, err => console.error('Firebase data error:', err.code, err.message));
         });
 
         logoutBtn.addEventListener('click', e => {
             e.preventDefault();
+            if (userDataListener) {
+                db.ref(`users/${auth.currentUser?.uid}`).off('value', userDataListener);
+                userDataListener = null;
+            }
             auth.signOut().then(() => window.location.href = 'index.html');
         });
 
-        // ── Real-time Listeners ────────────────────────────────────────────────
-        function attachListeners(uid) {
-            // Income listener
-            db.ref(`users/${uid}/income`).on('value', snap => {
-                const income = snap.val() || 0;
-                monthlyIncomeInp.value = income > 0 ? income : '';
-                rebuildUI(null, income);
-            }, err => console.error('Income listener error:', err));
+        // ── Save Income → users/${uid}/settings/monthlyIncome ─────────────────
+        saveIncomeBtn.addEventListener('click', async e => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if (!user) { alert('Not logged in.'); return; }
 
-            // Transactions listener
-            db.ref(`users/${uid}/transactions`).on('value', snap => {
-                const raw = snap.val() || {};
-                const txns = Object.entries(raw).map(([id, data]) => ({ id, ...data }));
-                // Newest first
-                txns.sort((a, b) => new Date(b.date) - new Date(a.date));
-                const income = parseFloat(monthlyIncomeInp.value) || 0;
-                rebuildUI(txns, income);
-            }, err => console.error('Transactions listener error:', err));
-        }
+            const val = parseFloat(monthlyIncomeInp.value);
+            if (isNaN(val) || val < 0) {
+                alert('Please enter a valid income amount.');
+                return;
+            }
 
-        // ── Core UI Rebuild ────────────────────────────────────────────────────
-        let latestTxns = [];
+            saveIncomeBtn.textContent = 'Saving…';
+            saveIncomeBtn.disabled    = true;
+            try {
+                await db.ref(`users/${user.uid}/settings/monthlyIncome`).set(val);
+            } catch (err) {
+                console.error('Income save failed:', err.code, err.message);
+                alert('Could not save income: ' + err.message);
+            } finally {
+                saveIncomeBtn.textContent = 'Save';
+                saveIncomeBtn.disabled    = false;
+            }
+        });
 
-        function rebuildUI(txns, income) {
-            if (txns !== null) latestTxns = txns;
-            const transactions = latestTxns;
+        // ── Add Transaction → users/${uid}/transactions ────────────────────────
+        submitTxBtn.addEventListener('click', async e => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if (!user) {
+                console.error('No authenticated user at submit time.');
+                alert('You must be logged in to add a transaction.');
+                return;
+            }
 
-            // ── Metric Cards ──
+            const date        = document.getElementById('txDate').value.trim();
+            const description = document.getElementById('txDesc').value.trim();
+            const category    = document.getElementById('txCategory').value;
+            const amount      = parseFloat(document.getElementById('txAmount').value);
+
+            if (!date || !description || !category || isNaN(amount) || amount <= 0) {
+                alert('Please fill in all fields with a valid amount.');
+                return;
+            }
+
+            submitTxBtn.disabled    = true;
+            submitTxBtn.textContent = 'Saving…';
+
+            try {
+                await db.ref(`users/${user.uid}/transactions`).push({
+                    date,
+                    description,
+                    category,
+                    type:      'Expense',
+                    amount:    parseFloat(amount.toFixed(2)), // stored as number
+                    createdAt: Date.now()
+                });
+
+                // Clear all form inputs immediately on success
+                document.getElementById('txDate').value     = '';
+                document.getElementById('txDesc').value     = '';
+                document.getElementById('txCategory').value = '';
+                document.getElementById('txAmount').value   = '';
+                closeModal();
+                // No manual UI update needed — the unified onValue listener fires automatically
+
+            } catch (err) {
+                console.error('Transaction write failed:', err.code, err.message);
+                alert('Error saving transaction: ' + err.message);
+            } finally {
+                submitTxBtn.disabled    = false;
+                submitTxBtn.textContent = 'Add Transaction';
+            }
+        });
+
+        // ── Master dashboard rebuild ───────────────────────────────────────────
+        function rebuildDashboard(monthlyIncome, transactions) {
+
+            // 1. Calculate totals
             const totalExpenses = transactions.reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-            const remaining     = income - totalExpenses;
+            const remaining     = monthlyIncome - totalExpenses;
 
-            document.getElementById('cardIncome').textContent  = fmt(income);
+            // 2. Update metric cards
+            document.getElementById('cardIncome').textContent  = fmt(monthlyIncome);
             document.getElementById('cardExpense').textContent = fmt(totalExpenses);
 
             const balanceEl = document.getElementById('cardBalance');
             balanceEl.textContent = (remaining < 0 ? '-' : '') + fmt(remaining);
             balanceEl.style.color = remaining < 0 ? '#f87171' : '#60a5fa';
 
-            // ── Category Totals ──
+            // 3. Aggregate by category
             const catTotals = {};
-            CATEGORIES.forEach(c => catTotals[c.name] = 0);
+            CATEGORIES.forEach(c => { catTotals[c.name] = 0; });
             transactions.forEach(t => {
-                const cat = t.category || 'Other';
-                if (catTotals[cat] !== undefined) catTotals[cat] += parseFloat(t.amount || 0);
-                else catTotals['Other'] += parseFloat(t.amount || 0);
+                const key = catTotals.hasOwnProperty(t.category) ? t.category : 'Other';
+                catTotals[key] += parseFloat(t.amount || 0);
             });
 
-            // ── Bar Chart ──
-            renderBarChart(catTotals, income);
-
-            // ── Category List ──
+            // 4. Render charts, breakdown list, and ledger
+            renderBarChart(catTotals, monthlyIncome);
             renderCategoryList(catTotals);
-
-            // ── Ledger ──
             renderLedger(transactions);
         }
 
-        // ── Bar Chart Renderer ─────────────────────────────────────────────────
+        // ── Budget vs Actual bar chart ─────────────────────────────────────────
         function renderBarChart(catTotals, income) {
             const container = document.getElementById('barChart');
             container.innerHTML = '';
 
-            // Budget allocation: 25% of income per major category (rough heuristic)
-            const budgetPerCat = income > 0 ? income * 0.25 : 0;
-            const maxVal = Math.max(...Object.values(catTotals), budgetPerCat, 1);
-
             CATEGORIES.forEach(cat => {
-                const actual = catTotals[cat.name] || 0;
-                const budget = budgetPerCat;
-                const budgetPct = Math.min((budget / maxVal) * 100, 100);
-                const actualPct = Math.min((actual / maxVal) * 100, 100);
-                const isOver   = actual > budget && budget > 0;
+                const actual    = catTotals[cat.name] || 0;
+                const budget    = income * cat.budgetPct;
+                // Scale bars relative to the largest value visible, floor at 1 to avoid ÷0
+                const ceiling   = Math.max(...Object.values(catTotals), ...CATEGORIES.map(c => income * c.budgetPct), 1);
+                const budgetPct = Math.min((budget / ceiling) * 100, 100).toFixed(1);
+                const actualPct = Math.min((actual / ceiling) * 100, 100).toFixed(1);
+                const isOver    = actual > budget && budget > 0;
 
                 const row = document.createElement('div');
                 row.className = 'bar-row';
                 row.innerHTML = `
                     <div class="bar-meta">
                         <span>${cat.icon} ${cat.name}</span>
-                        <span>${fmt(actual)}${budget > 0 ? ' / ' + fmt(budget) : ''}</span>
+                        <span style="color:${isOver ? '#e74c3c' : '#444'}">
+                            ${fmt(actual)} / ${income > 0 ? fmt(budget) : '—'}
+                        </span>
                     </div>
-                    <div class="bar-track" style="margin-bottom:4px;">
-                        <div class="bar-fill bar-budget" style="width:${budgetPct}%;opacity:0.5;"></div>
+                    <div class="bar-track" style="margin-bottom:4px;" title="Budget: ${fmt(budget)}">
+                        <div class="bar-fill bar-budget" style="width:${budgetPct}%;opacity:0.55;"></div>
                     </div>
-                    <div class="bar-track">
+                    <div class="bar-track" title="Actual: ${fmt(actual)}">
                         <div class="bar-fill ${isOver ? 'bar-over' : 'bar-actual'}" style="width:${actualPct}%;"></div>
                     </div>`;
                 container.appendChild(row);
             });
         }
 
-        // ── Category List Renderer ─────────────────────────────────────────────
+        // ── Category spending breakdown ────────────────────────────────────────
         function renderCategoryList(catTotals) {
             const container = document.getElementById('categoryList');
             container.innerHTML = '';
@@ -807,13 +889,18 @@
             });
         }
 
-        // ── Ledger Renderer ────────────────────────────────────────────────────
+        // ── Transaction ledger ─────────────────────────────────────────────────
         function renderLedger(transactions) {
             const tbody = document.getElementById('ledgerBody');
             tbody.innerHTML = '';
 
             if (transactions.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5"><div class="empty-ledger"><span>📋</span>No transactions yet. Add one to get started.</div></td></tr>`;
+                tbody.innerHTML = `
+                    <tr><td colspan="5">
+                        <div class="empty-ledger">
+                            <span>📋</span>No transactions yet. Add one to get started.
+                        </div>
+                    </td></tr>`;
                 return;
             }
 
@@ -824,87 +911,9 @@
                     <td class="td-desc">${escapeHtml(t.description || '—')}</td>
                     <td><span class="td-cat">${escapeHtml(t.category || 'Other')}</span></td>
                     <td class="td-type-expense">Expense</td>
-                    <td class="td-amount-expense">-${fmt(parseFloat(t.amount || 0))}</td>`;
+                    <td class="td-amount-expense">−${fmt(parseFloat(t.amount || 0))}</td>`;
                 tbody.appendChild(tr);
             });
-        }
-
-        // ── Add Transaction ────────────────────────────────────────────────────
-        submitTxBtn.addEventListener('click', async () => {
-            // Use auth.currentUser (synchronous) rather than a cached uid variable
-            const user = auth.currentUser;
-            if (!user) {
-                console.error('Submit attempted before auth resolved — no current user.');
-                alert('You must be logged in to add a transaction.');
-                return;
-            }
-
-            const date     = document.getElementById('txDate').value.trim();
-            const desc     = document.getElementById('txDesc').value.trim();
-            const category = document.getElementById('txCategory').value;
-            // parseFloat ensures we store a number, not the raw input string
-            const amount   = parseFloat(parseFloat(document.getElementById('txAmount').value).toFixed(2));
-
-            if (!date || !desc || !category || isNaN(amount) || amount <= 0) {
-                alert('Please fill in all fields with valid values.');
-                return;
-            }
-
-            submitTxBtn.disabled = true;
-            submitTxBtn.textContent = 'Saving…';
-
-            try {
-                await db.ref(`users/${user.uid}/transactions`).push({
-                    date,
-                    description: desc,
-                    category,
-                    type: 'Expense',
-                    amount,          // stored as a float number, not a string
-                    createdAt: Date.now()
-                });
-                // Clear fields and close — real-time listener handles the UI update
-                document.getElementById('txDate').value     = '';
-                document.getElementById('txDesc').value     = '';
-                document.getElementById('txCategory').value = '';
-                document.getElementById('txAmount').value   = '';
-                closeModal();
-            } catch (err) {
-                console.error('Firebase write failed:', err.code, err.message);
-                alert('Error saving transaction: ' + err.message);
-            } finally {
-                submitTxBtn.disabled = false;
-                submitTxBtn.textContent = 'Add Transaction';
-            }
-        });
-
-        // ── Save Income ────────────────────────────────────────────────────────
-        saveIncomeBtn.addEventListener('click', async () => {
-            if (!currentUid) return;
-            const val = parseFloat(monthlyIncomeInp.value);
-            if (isNaN(val) || val < 0) { alert('Please enter a valid income amount.'); return; }
-
-            saveIncomeBtn.textContent = 'Saving…';
-            saveIncomeBtn.disabled = true;
-            try {
-                await db.ref(`users/${currentUid}/income`).set(val);
-            } catch (err) {
-                alert('Error saving income: ' + err.message);
-            } finally {
-                saveIncomeBtn.textContent = 'Save';
-                saveIncomeBtn.disabled = false;
-            }
-        });
-
-        // ── Utilities ──────────────────────────────────────────────────────────
-        function formatDate(dateStr) {
-            if (!dateStr) return '—';
-            const [y, m, d] = dateStr.split('-');
-            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-            return `${months[parseInt(m,10)-1]} ${parseInt(d,10)}, ${y}`;
-        }
-
-        function escapeHtml(str) {
-            return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
     </script>
 </body>
