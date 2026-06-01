@@ -681,15 +681,16 @@
         modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
 
         // ── Auth Gate ──────────────────────────────────────────────────────────
-        let currentUid = null;
-        let txListener  = null;
-        let incListener = null;
+        let listenersAttached = false;
 
         auth.onAuthStateChanged(user => {
             if (!user) { window.location.href = 'login.html'; return; }
-            currentUid = user.uid;
             document.getElementById('navUsername').textContent = user.displayName || 'User';
-            attachListeners(user.uid);
+            // Guard: only register listeners once per session to prevent duplicate handlers
+            if (!listenersAttached) {
+                listenersAttached = true;
+                attachListeners(user.uid);
+            }
         });
 
         logoutBtn.addEventListener('click', e => {
@@ -700,24 +701,21 @@
         // ── Real-time Listeners ────────────────────────────────────────────────
         function attachListeners(uid) {
             // Income listener
-            const incRef = db.ref(`users/${uid}/income`);
-            incListener = incRef.on('value', snap => {
+            db.ref(`users/${uid}/income`).on('value', snap => {
                 const income = snap.val() || 0;
                 monthlyIncomeInp.value = income > 0 ? income : '';
-                rebuildUI(null, income); // triggers re-render with latest txns + new income
-            });
+                rebuildUI(null, income);
+            }, err => console.error('Income listener error:', err));
 
             // Transactions listener
-            const txRef = db.ref(`users/${uid}/transactions`);
-            txListener = txRef.on('value', snap => {
+            db.ref(`users/${uid}/transactions`).on('value', snap => {
                 const raw = snap.val() || {};
                 const txns = Object.entries(raw).map(([id, data]) => ({ id, ...data }));
-                // Sort by date ascending (oldest first = bottom), newest at top
+                // Newest first
                 txns.sort((a, b) => new Date(b.date) - new Date(a.date));
-
                 const income = parseFloat(monthlyIncomeInp.value) || 0;
                 rebuildUI(txns, income);
-            });
+            }, err => console.error('Transactions listener error:', err));
         }
 
         // ── Core UI Rebuild ────────────────────────────────────────────────────
@@ -833,12 +831,19 @@
 
         // ── Add Transaction ────────────────────────────────────────────────────
         submitTxBtn.addEventListener('click', async () => {
-            if (!currentUid) return;
+            // Use auth.currentUser (synchronous) rather than a cached uid variable
+            const user = auth.currentUser;
+            if (!user) {
+                console.error('Submit attempted before auth resolved — no current user.');
+                alert('You must be logged in to add a transaction.');
+                return;
+            }
 
             const date     = document.getElementById('txDate').value.trim();
             const desc     = document.getElementById('txDesc').value.trim();
             const category = document.getElementById('txCategory').value;
-            const amount   = parseFloat(document.getElementById('txAmount').value);
+            // parseFloat ensures we store a number, not the raw input string
+            const amount   = parseFloat(parseFloat(document.getElementById('txAmount').value).toFixed(2));
 
             if (!date || !desc || !category || isNaN(amount) || amount <= 0) {
                 alert('Please fill in all fields with valid values.');
@@ -849,16 +854,22 @@
             submitTxBtn.textContent = 'Saving…';
 
             try {
-                await db.ref(`users/${currentUid}/transactions`).push({
+                await db.ref(`users/${user.uid}/transactions`).push({
                     date,
                     description: desc,
                     category,
                     type: 'Expense',
-                    amount: amount.toFixed(2),
+                    amount,          // stored as a float number, not a string
                     createdAt: Date.now()
                 });
+                // Clear fields and close — real-time listener handles the UI update
+                document.getElementById('txDate').value     = '';
+                document.getElementById('txDesc').value     = '';
+                document.getElementById('txCategory').value = '';
+                document.getElementById('txAmount').value   = '';
                 closeModal();
             } catch (err) {
+                console.error('Firebase write failed:', err.code, err.message);
                 alert('Error saving transaction: ' + err.message);
             } finally {
                 submitTxBtn.disabled = false;
