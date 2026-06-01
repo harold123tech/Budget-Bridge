@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Bridge - Savings</title>
+    <link rel="stylesheet" href="auth-layout.css">
+    <link rel="stylesheet" href="educational-apps.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Lora:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="left-section">
+            <button class="menu-toggle" id="menuBtn">
+                <span class="hamburger">&#9776;</span>
+            </button>
+            <div class="logo-wrapper">
+                <img src="images/Logo.png" alt="Budget Bridge Logo" class="brand-logo">
+                <h1 class="logo-text">udget Bridge</h1>
+            </div>
+        </div>
+        <div class="auth-links user-profile-display">
+            <span id="navUsername">Loading...</span>
+        </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <nav class="side-menu" id="sideMenu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="savings.html" style="color: #000; font-weight: 800;">Savings</a>
+        <a href="budget.html">Budget</a>
+        <a href="loans.html">Loans</a>
+        <a href="#" id="logoutBtn" style="color: #e74c3c; margin-top: auto;">Log Out</a>
+    </nav>
+
+    <!-- PAGE CONTENT -->
+    <main class="savings-page">
+
+        <!-- PAGE HERO BANNER -->
+        <section class="savings-hero">
+            <div class="savings-hero-inner">
+                <div class="savings-hero-icon">🐷</div>
+                <h2 class="savings-hero-title">Savings</h2>
+                <p class="savings-hero-sub">Everything you need to understand, compare, and choose the right savings account for you.</p>
+            </div>
+        </section>
+
+        <!-- SECTION ANCHOR NAV -->
+        <nav class="section-nav">
+            <a href="#how-it-works">How It Works</a>
+            <a href="#account-types">Account Types</a>
+            <a href="#best-match">Find Your Best Match</a>
+        </nav>
+
+        <!-- SECTION 1: HOW DO SAVINGS ACCOUNTS WORK -->
+        <section class="content-section" id="how-it-works">
+            <div class="section-inner">
+                <h2 class="section-title">How Do Savings Accounts Work?</h2>
+                <p class="section-intro">A savings account is a secure place to store money at a bank or credit union while earning interest over time. Here are the core concepts you need to know:</p>
+
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <div class="concept-icon">📈</div>
+                        <h4>Interest & APY</h4>
+                        <p>Banks pay you a percentage of your balance just for keeping money with them. APY (Annual Percentage Yield) is the real annual rate you earn, including compounding — the higher the APY, the faster your money grows.</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="concept-icon">🛡️</div>
+                        <h4>FDIC Insurance</h4>
+                        <p>Money in FDIC-insured accounts is protected by the federal government up to $250,000 per depositor, per bank. This means even if your bank fails, your savings are safe.</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="concept-icon">💧</div>
+                        <h4>Liquidity</h4>
+                        <p>Unlike investments, savings accounts let you access your money quickly and without penalty. Most accounts allow free withdrawals at any time, making them ideal for emergency funds.</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="concept-icon">📋</div>
+                        <h4>Minimum Balances</h4>
+                        <p>Some accounts require a minimum balance to open or to avoid monthly fees. Online banks often have no minimum requirements, while traditional banks may require $25–$500 to get started.</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="concept-icon">💸</div>
+                        <h4>Monthly Fees</h4>
+                        <p>Certain accounts charge a maintenance fee each month. These fees can often be waived by meeting a minimum balance or setting up direct deposit. Always check the fee structure before opening an account.</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="concept-icon">🔄</div>
+                        <h4>Compounding</h4>
+                        <p>Compounding means you earn interest on your interest. Most savings accounts compound daily or monthly. The more frequently interest compounds, the more you earn over time — even with the same APY.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: COMPARING ACCOUNT TYPES -->
+        <section class="content-section section-alt" id="account-types">
+            <div class="section-inner">
+                <h2 class="section-title">Comparing Savings Account Types</h2>
+                <p class="section-intro">Not all savings accounts are the same. Here is a breakdown of the four most common types and when each one makes the most sense for your goals.</p>
+
+                <div class="type-cards">
+                    <div class="type-card">
+                        <div class="type-badge">Traditional</div>
+                        <h4>Traditional Savings Account</h4>
+                        <p>Offered by brick-and-mortar banks and credit unions. Easy to open, branch access included, but typically offers the lowest interest rates (0.01%–0.10% APY).</p>
+                        <div class="type-best-for">
+                            <span class="best-label">Best for:</span> Beginners building their first savings habit or those who want in-person banking support.
+                        </div>
+                    </div>
+
+                    <div class="type-card type-card-featured">
+                        <div class="type-badge badge-featured">High-Yield</div>
+                        <h4>High-Yield Savings Account</h4>
+                        <p>Typically offered by online banks with significantly higher APYs (4.00%–5.50%). No physical branches, but fully FDIC insured and accessible 24/7 online.</p>
+                        <div class="type-best-for">
+                            <span class="best-label">Best for:</span> Anyone looking to grow their emergency fund or long-term savings faster with minimal effort.
+                        </div>
+                    </div>
+
+                    <div class="type-card">
+                        <div class="type-badge">Money Market</div>
+                        <h4>Money Market Account</h4>
+                        <p>A hybrid between a savings and checking account. Offers higher rates than traditional savings and often includes check-writing or debit card access. May require higher minimum balances.</p>
+                        <div class="type-best-for">
+                            <span class="best-label">Best for:</span> Savers with a larger balance who want some spending flexibility without losing interest earnings.
+                        </div>
+                    </div>
+
+                    <div class="type-card">
+                        <div class="type-badge">CD</div>
+                        <h4>Certificate of Deposit (CD)</h4>
+                        <p>You lock your money in for a fixed term (3 months to 5 years) in exchange for a guaranteed, often higher interest rate. Early withdrawal results in a penalty fee.</p>
+                        <div class="type-best-for">
+                            <span class="best-label">Best for:</span> Savers with money they won't need for a set period who want a guaranteed return with zero risk.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: FIND YOUR BEST MATCH (COMPARISON TABLE) -->
+        <section class="content-section" id="best-match">
+            <div class="section-inner">
+                <h2 class="section-title">Find Your Best Account Match</h2>
+                <p class="section-intro">Compare real savings accounts from top banks side by side. Rates shown are approximate and subject to change — always verify directly with the bank.</p>
+
+                <div class="table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Bank</th>
+                                <th>Account Type</th>
+                                <th>APY</th>
+                                <th>Min. Balance</th>
+                                <th>Monthly Fee</th>
+                                <th>FDIC Insured</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row-highlight">
+                                <td><span class="bank-name">Ally Bank</span></td>
+                                <td>High-Yield Savings</td>
+                                <td><span class="apy-badge apy-high">4.20%</span></td>
+                                <td>$0</td>
+                                <td>None</td>
+                                <td><span class="yes-badge">✓ Yes</span></td>
+                                <td>Maximizing interest, no fees</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bank-name">Marcus by Goldman Sachs</span></td>
+                                <td>High-Yield Savings</td>
+                                <td><span class="apy-badge apy-high">4.10%</span></td>
+                                <td>$0</td>
+                                <td>None</td>
+                                <td><span class="yes-badge">✓ Yes</span></td>
+                                <td>High APY with no minimums</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bank-name">Capital One 360</span></td>
+                                <td>High-Yield Savings</td>
+                                <td><span class="apy-badge apy-high">3.80%</span></td>
+                                <td>$0</td>
+                                <td>None</td>
+                                <td><span class="yes-badge">✓ Yes</span></td>
+                                <td>Online banking + branch access</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bank-name">Discover Bank</span></td>
+                                <td>High-Yield Savings</td>
+                                <td><span class="apy-badge apy-high">4.00%</span></td>
+                                <td>$0</td>
+                                <td>None</td>
+                                <td><span class="yes-badge">✓ Yes</span></td>
+                                <td>No fees, strong customer service</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bank-name">Chase Bank</span></td>
+                                <td>Traditional Savings</td>
+                                <td><span class="apy-badge apy-low">0.01%</span></td>
+                                <td>$300</td>
+                                <td>$5/mo</td>
+                                <td><span class="yes-badge">✓ Yes</span></td>
+                                <td>In-person banking, Chase ecosystem</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bank-name">Wells Fargo</span></td>
+                                <td>Traditional Savings</td>
+                                <td><span class="apy-badge apy-low">0.01%</span></td>
+                                <td>$25</td>
+                                <td>$5/mo</td>
+                                <td><span class="yes-badge">✓ Yes</span></td>
+                                <td>Wide ATM network, branch access</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bank-name">Synchrony Bank</span></td>
+                                <td>High-Yield Savings</td>
+                                <td><span class="apy-badge apy-high">4.50%</span></td>
+                                <td>$0</td>
+                                <td>None</td>
+                                <td><span class="yes-badge">✓ Yes</span></td>
+                                <td>Highest APY, ATM card included</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bank-name">American Express</span></td>
+                                <td>High-Yield Savings</td>
+                                <td><span class="apy-badge apy-high">4.00%</span></td>
+                                <td>$0</td>
+                                <td>None</td>
+                                <td><span class="yes-badge">✓ Yes</span></td>
+                                <td>AmEx cardholders, trusted brand</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bank-name">Citibank</span></td>
+                                <td>Traditional Savings</td>
+                                <td><span class="apy-badge apy-low">0.04%</span></td>
+                                <td>$0</td>
+                                <td>$4.50/mo</td>
+                                <td><span class="yes-badge">✓ Yes</span></td>
+                                <td>International banking needs</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bank-name">Sallie Mae Bank</span></td>
+                                <td>High-Yield Savings</td>
+                                <td><span class="apy-badge apy-high">4.65%</span></td>
+                                <td>$0</td>
+                                <td>None</td>
+                                <td><span class="yes-badge">✓ Yes</span></td>
+                                <td>Students & young savers</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="table-disclaimer">* APY rates are approximate and based on publicly available data as of 2025. Rates change frequently — visit each bank's website to confirm current offers before opening an account.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer-bar"></footer>
+
+    <!-- FIREBASE -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDS5r7RaNUgOO4Q-koKj_7qhVknNhbSz8I",
+            authDomain: "budget-bridge-dc5ab.firebaseapp.com",
+            projectId: "budget-bridge-dc5ab",
+            storageBucket: "budget-bridge-dc5ab.firebasestorage.app",
+            messagingSenderId: "685535098423",
+            appId: "1:685535098423:web:5c8f388500524a3592b1b2",
+            measurementId: "G-DPMQ3P0LX5"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        const menuBtn = document.getElementById('menuBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const navUsername = document.getElementById('navUsername');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        menuBtn.addEventListener('click', () => {
+            sideMenu.classList.toggle('active');
+        });
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                navUsername.textContent = user.displayName || 'User';
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            firebase.auth().signOut().then(() => {
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

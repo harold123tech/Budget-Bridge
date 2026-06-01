@@ -164,28 +164,29 @@ body {
 .nav-card {
     background-color: var(--brand-color);
     color: white;
-    width: 340px;
-    height: 95px; /* Fixed default height to hide the questions initially */
+    width: 320px;
+    /* CHANGE HERE: Increase starting height and use padding to align everything */
+    height: 110px; 
     border-radius: 15px;
-    padding: 15px 20px;
+    padding: 22px 20px; /* Generous padding to center the header elements */
     cursor: pointer;
     transition: all 0.4s ease-in-out; 
-    overflow: hidden; /* Crucial! This hides everything outside the 95px box */
+    overflow: hidden; /* Keeps the list hidden initially */
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     border: 3px solid var(--brand-color);
     display: flex;
     flex-direction: column;
 }
 
-/* THE HOVER EFFECT: Growing the card box size and shifting colors */
+/* THE HOVER EFFECT */
 .nav-card:hover {
     background-color: #ffffff; 
     color: var(--brand-color); 
-    height: 280px; /* Expands the card box smoothly so the list shows */
+    /* CHANGE HERE: Give it enough room to show the full list clearly */
+    height: 300px; 
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.2);
 }
-
 /* THE SLIDE MENU STRUCTURE */
 .question-list {
     list-style: none;
@@ -335,4 +336,297 @@ body {
 
 .form-group {
     margin-bottom: 25px
+}
+
+/* ==========================================
+   7. SAVINGS PAGE
+   ========================================== */
+
+.savings-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hero banner */
+.savings-hero {
+    background-color: var(--brand-color);
+    padding: 60px 10%;
+    text-align: center;
+    color: white;
+}
+
+.savings-hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.savings-hero-icon {
+    font-size: 3.5rem;
+    margin-bottom: 12px;
+}
+
+.savings-hero-title {
+    font-family: 'Lora', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.savings-hero-sub {
+    font-size: 1.15rem;
+    font-weight: 400;
+    opacity: 0.92;
+    line-height: 1.6;
+}
+
+/* In-page section anchor nav */
+.section-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: #f4f4f4;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.section-nav a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 16px 32px;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.section-nav a:hover {
+    color: var(--brand-color);
+    border-bottom-color: var(--brand-color);
+}
+
+/* Content sections */
+.content-section {
+    padding: 70px 10%;
+}
+
+.section-alt {
+    background-color: #f9f9f7;
+}
+
+.section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.section-intro {
+    font-size: 1.05rem;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    max-width: 750px;
+}
+
+/* Section 1 — Concept grid */
+.concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 24px;
+}
+
+.concept-card {
+    background: white;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 28px 24px;
+    transition: box-shadow 0.25s, transform 0.25s;
+}
+
+.concept-card:hover {
+    box-shadow: 0 6px 20px rgba(79, 145, 171, 0.15);
+    transform: translateY(-3px);
+}
+
+.concept-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+
+.concept-card h4 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--brand-color);
+    margin-bottom: 10px;
+}
+
+.concept-card p {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.65;
+}
+
+/* Section 2 — Account type cards */
+.type-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 24px;
+}
+
+.type-card {
+    background: white;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 28px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: box-shadow 0.25s, transform 0.25s;
+}
+
+.type-card:hover {
+    box-shadow: 0 6px 20px rgba(79, 145, 171, 0.15);
+    transform: translateY(-3px);
+}
+
+.type-card-featured {
+    border-color: var(--brand-color);
+    border-width: 2.5px;
+}
+
+.type-badge {
+    display: inline-block;
+    background: #e8f4f8;
+    color: var(--brand-color);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    width: fit-content;
+}
+
+.badge-featured {
+    background: var(--brand-color);
+    color: white;
+}
+
+.type-card h4 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #111;
+}
+
+.type-card p {
+    font-size: 0.93rem;
+    color: #555;
+    line-height: 1.65;
+    flex: 1;
+}
+
+.type-best-for {
+    font-size: 0.88rem;
+    color: #444;
+    background: #f4f4f4;
+    border-radius: 8px;
+    padding: 10px 12px;
+    line-height: 1.5;
+}
+
+.best-label {
+    font-weight: 800;
+    color: var(--brand-color);
+}
+
+/* Section 3 — Comparison table */
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1.5px solid #e8e8e8;
+    margin-bottom: 16px;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.93rem;
+    min-width: 760px;
+}
+
+.comparison-table thead {
+    background-color: var(--brand-color);
+    color: white;
+}
+
+.comparison-table thead th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.88rem;
+    letter-spacing: 0.3px;
+}
+
+.comparison-table tbody tr {
+    border-bottom: 1px solid #efefef;
+    transition: background 0.15s;
+}
+
+.comparison-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.comparison-table tbody tr:hover {
+    background-color: #f0f8fb;
+}
+
+.comparison-table td {
+    padding: 14px 16px;
+    color: #333;
+    vertical-align: middle;
+}
+
+.row-highlight {
+    background-color: #fafeff;
+}
+
+.bank-name {
+    font-weight: 700;
+    color: #111;
+}
+
+.apy-badge {
+    display: inline-block;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.88rem;
+}
+
+.apy-high {
+    background: #d4edda;
+    color: #1a6631;
+}
+
+.apy-low {
+    background: #fde8e8;
+    color: #8b1a1a;
+}
+
+.yes-badge {
+    color: #1a6631;
+    font-weight: 700;
+}
+
+.table-disclaimer {
+    font-size: 0.83rem;
+    color: #888;
+    font-style: italic;
+    line-height: 1.5;
 }
