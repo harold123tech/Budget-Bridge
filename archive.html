@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Bridge - Learning Archive</title>
+    <link rel="stylesheet" href="auth-layout.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Lora:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* ── Page shell ── */
+        .archive-page {
+            flex: 1;
+            background: #f9f9f7;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Hero ── */
+        .archive-hero {
+            background: var(--brand-color);
+            padding: 64px 10%;
+            text-align: center;
+            color: white;
+        }
+        .archive-hero-icon { font-size: 3.2rem; margin-bottom: 14px; }
+        .archive-hero-title {
+            font-family: 'Lora', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            line-height: 1.2;
+        }
+        .archive-hero-sub {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.65;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        /* ── Section nav pill bar ── */
+        .section-nav {
+            display: flex;
+            justify-content: center;
+            background: white;
+            border-bottom: 2px solid #ebebeb;
+            flex-wrap: wrap;
+        }
+        .section-nav a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 700;
+            font-size: 0.92rem;
+            padding: 16px 30px;
+            border-bottom: 3px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+            white-space: nowrap;
+        }
+        .section-nav a:hover {
+            color: var(--brand-color);
+            border-bottom-color: var(--brand-color);
+        }
+
+        /* ── Content sections ── */
+        .archive-section {
+            padding: 72px 10%;
+        }
+        .archive-section.alt { background: white; }
+
+        .section-inner { max-width: 820px; margin: 0 auto; }
+
+        .section-eyebrow {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--brand-color);
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 18px;
+            line-height: 1.25;
+        }
+        .section-lead {
+            font-size: 1.08rem;
+            color: #444;
+            line-height: 1.75;
+            margin-bottom: 36px;
+        }
+
+        /* ── Pull-quote / blockquote ── */
+        blockquote {
+            border-left: 4px solid var(--brand-color);
+            margin: 0 0 36px 0;
+            padding: 18px 24px;
+            background: #eef7fb;
+            border-radius: 0 10px 10px 0;
+        }
+        blockquote p {
+            font-size: 1.08rem;
+            font-style: italic;
+            color: #333;
+            line-height: 1.7;
+            margin: 0;
+        }
+        blockquote cite {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--brand-color);
+            font-style: normal;
+        }
+
+        /* ── Bullet insight list ── */
+        .insight-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 36px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .insight-list li {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.65;
+        }
+        .insight-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .insight-list strong { color: #111; }
+
+        /* ── Info card grid ── */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 36px;
+        }
+        .info-card {
+            background: white;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 14px;
+            padding: 24px 20px;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .info-card:hover {
+            box-shadow: 0 6px 20px rgba(79,145,171,0.15);
+            transform: translateY(-3px);
+        }
+        .info-card-icon { font-size: 1.9rem; margin-bottom: 10px; }
+        .info-card h4 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--brand-color);
+            margin-bottom: 8px;
+        }
+        .info-card p {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* ── Timeline for goal achievement ── */
+        .timeline { margin-bottom: 40px; }
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 28px;
+            position: relative;
+        }
+        .timeline-item:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: 23px;
+            top: 46px;
+            bottom: -28px;
+            width: 2px;
+            background: #e0e0e0;
+        }
+        .timeline-marker {
+            flex-shrink: 0;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--brand-color);
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(79,145,171,0.3);
+            z-index: 1;
+        }
+        .timeline-body { padding-top: 6px; }
+        .timeline-body h4 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 6px;
+        }
+        .timeline-body p {
+            font-size: 0.93rem;
+            color: #555;
+            line-height: 1.65;
+        }
+
+        /* ── Goal-horizon tag strip ── */
+        .horizon-strip {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+        .horizon-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+        .tag-short  { background: #d4edda; color: #1a6631; }
+        .tag-medium { background: #fff3cd; color: #856404; }
+        .tag-long   { background: #cce5ff; color: #004085; }
+
+        /* ── CTA banner ── */
+        .cta-banner {
+            background: var(--brand-color);
+            color: white;
+            border-radius: 16px;
+            padding: 36px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .cta-banner h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .cta-banner p { font-size: 0.95rem; opacity: 0.9; }
+        .cta-link {
+            background: white;
+            color: var(--brand-color);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.95rem;
+            padding: 13px 26px;
+            border-radius: 50px;
+            white-space: nowrap;
+            transition: opacity 0.2s, transform 0.15s;
+            flex-shrink: 0;
+        }
+        .cta-link:hover { opacity: 0.9; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAVBAR ── -->
+    <header class="navbar">
+        <div class="left-section">
+            <button class="menu-toggle" id="menuBtn"><span class="hamburger">&#9776;</span></button>
+            <div class="logo-wrapper">
+                <img src="images/Logo.png" alt="Budget Bridge Logo" class="brand-logo">
+                <h1 class="logo-text">udget Bridge</h1>
+            </div>
+        </div>
+        <div class="auth-links">
+            <span id="navUsername">Loading...</span>
+        </div>
+    </header>
+
+    <!-- ── SIDEBAR ── -->
+    <nav class="side-menu" id="sideMenu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="savings.html">Savings</a>
+        <a href="budget.html">Budget Tracker</a>
+        <a href="loans.html">Loans</a>
+        <a href="archive.html" style="color:#000;font-weight:800;">Learning Archive</a>
+        <a href="#" id="logoutBtn" style="color:#e74c3c;margin-top:auto;">Log Out</a>
+    </nav>
+
+    <main class="archive-page">
+
+        <!-- Hero -->
+        <section class="archive-hero">
+            <div class="archive-hero-icon">📚</div>
+            <h2 class="archive-hero-title">Learning Archive</h2>
+            <p class="archive-hero-sub">Core financial concepts that power every smart money decision. Read at your own pace — these guides are here whenever you need them.</p>
+        </section>
+
+        <!-- Section nav -->
+        <nav class="section-nav">
+            <a href="#why-budget">Why Budget?</a>
+            <a href="#goal-achievement">Goal Achievement</a>
+        </nav>
+
+        <!-- ════════════════════════════════════════
+             SECTION 1 — WHY IS BUDGETING IMPORTANT?
+             ════════════════════════════════════════ -->
+        <section class="archive-section alt" id="why-budget">
+            <div class="section-inner">
+                <p class="section-eyebrow">Foundation Concept</p>
+                <h2 class="section-title">Why Is Organizing a Budget Important for Me?</h2>
+                <p class="section-lead">A budget is not a restriction — it is a plan that puts you in control. Without one, money disappears without a destination. With one, every dollar has a job, and your financial life stops being reactive and starts being intentional.</p>
+
+                <blockquote>
+                    <p>"A budget is telling your money where to go instead of wondering where it went."</p>
+                    <cite>— Dave Ramsey, Financial Author</cite>
+                </blockquote>
+
+                <p class="section-eyebrow" style="margin-bottom:18px;">The core reasons budgeting changes everything</p>
+                <ul class="insight-list">
+                    <li>
+                        <span class="insight-icon">🔍</span>
+                        <span><strong>Visibility over spending.</strong> Most people genuinely do not know where their money goes each month. A budget forces you to see the full picture — subscriptions, impulse purchases, food costs — all of it at once.</span>
+                    </li>
+                    <li>
+                        <span class="insight-icon">🛡️</span>
+                        <span><strong>Emergency preparedness.</strong> Financial stress spikes when unexpected costs appear with no plan. A budget carves out a monthly buffer so that a flat tire or medical co-pay doesn't derail everything else.</span>
+                    </li>
+                    <li>
+                        <span class="insight-icon">📈</span>
+                        <span><strong>Accelerated goal progress.</strong> Saving without a budget is guesswork. A budget makes saving automatic — a fixed line item alongside rent and groceries — instead of whatever is left over at month's end (which is usually nothing).</span>
+                    </li>
+                    <li>
+                        <span class="insight-icon">🧘</span>
+                        <span><strong>Reduced financial anxiety.</strong> Money stress is one of the leading causes of anxiety for young adults. Knowing exactly what you have, what you owe, and what you're saving creates a sense of calm control that is genuinely life-changing.</span>
+                    </li>
+                    <li>
+                        <span class="insight-icon">🏦</span>
+                        <span><strong>Creditworthiness and future access.</strong> Lenders, landlords, and employers increasingly check financial behaviour. A history of living within your means demonstrates reliability — and opens doors to lower interest rates and better rental terms.</span>
+                    </li>
+                </ul>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-icon">💡</div>
+                        <h4>The 50 / 30 / 20 Rule</h4>
+                        <p>50% of take-home pay covers needs. 30% funds wants. 20% goes directly to savings or debt repayment. A simple framework that scales at any income level.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">📅</div>
+                        <h4>Monthly vs Weekly</h4>
+                        <p>Weekly budgets work better for irregular incomes (gig work, tips). Monthly budgets suit salaried earners. The right cadence is whichever one you'll actually maintain.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">🔁</div>
+                        <h4>Zero-Based Budgeting</h4>
+                        <p>Every dollar of income is assigned a purpose before the month begins — spending, saving, or investing — until the balance reaches exactly zero. No dollar is unaccounted for.</p>
+                    </div>
+                </div>
+
+                <blockquote>
+                    <p>Research from the National Financial Educators Council found that a lack of financial literacy cost Americans an estimated <strong>$1,819 per person</strong> in 2022 alone — money lost to fees, high-interest debt, and poor purchasing decisions that a budget would have prevented.</p>
+                </blockquote>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════
+             SECTION 2 — GOAL ACHIEVEMENT
+             ════════════════════════════════════════ -->
+        <section class="archive-section" id="goal-achievement">
+            <div class="section-inner">
+                <p class="section-eyebrow">Strategy Framework</p>
+                <h2 class="section-title">Goal Achievement Through Budgeting</h2>
+                <p class="section-lead">Goals without a budget are just wishes. The moment you attach a dollar amount and a timeline to a goal, it becomes a plan — and plans have steps. Here's how to build a goal-first financial strategy from the ground up.</p>
+
+                <!-- Horizon tags -->
+                <div class="horizon-strip">
+                    <span class="horizon-tag tag-short">⚡ Short-Term · 0 – 12 Months</span>
+                    <span class="horizon-tag tag-medium">🚗 Medium-Term · 1 – 5 Years</span>
+                    <span class="horizon-tag tag-long">🏡 Long-Term · 5+ Years</span>
+                </div>
+
+                <ul class="insight-list" style="margin-bottom:40px;">
+                    <li>
+                        <span class="insight-icon">⚡</span>
+                        <span><strong>Short-term goals (0–12 months)</strong> are immediate and tangible: building a $1,000 emergency fund, paying off a single credit card, saving for a new laptop, or funding a trip. These need consistent, small monthly actions and a very clear target number.</span>
+                    </li>
+                    <li>
+                        <span class="insight-icon">🚗</span>
+                        <span><strong>Medium-term goals (1–5 years)</strong> include buying a car, funding a college degree, saving a rental deposit, or launching a side business. These require disciplined saving across many months and often benefit from a dedicated high-yield savings account.</span>
+                    </li>
+                    <li>
+                        <span class="insight-icon">🏡</span>
+                        <span><strong>Long-term goals (5+ years)</strong> — retirement, homeownership, financial independence — benefit most from compound interest. Starting at 18 vs. starting at 30 can mean hundreds of thousands of dollars difference by retirement age.</span>
+                    </li>
+                </ul>
+
+                <p class="section-eyebrow" style="margin-bottom:20px;">The 4-step goal budgeting process</p>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker">1</div>
+                        <div class="timeline-body">
+                            <h4>Name the goal with a dollar amount and a date</h4>
+                            <p>Vague goals fail. "Save money" is not actionable. "Save $2,400 for a used car by December" is. Specificity creates accountability and lets you reverse-engineer the monthly saving amount required.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">2</div>
+                        <div class="timeline-body">
+                            <h4>Find the monthly number</h4>
+                            <p>Divide the total amount by the number of months remaining. That figure becomes a non-negotiable line in your budget — treated exactly like a bill, not a leftover. Automate the transfer on payday.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">3</div>
+                        <div class="timeline-body">
+                            <h4>Identify where the money will come from</h4>
+                            <p>Review your current spending categories and find the surplus or the category to trim. Reducing one restaurant visit per week at $15 saves $60/month — $720 annually. Small cuts compound quickly into real progress.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">4</div>
+                        <div class="timeline-body">
+                            <h4>Review and adjust monthly</h4>
+                            <p>Life changes — income fluctuates, unexpected costs arise. A monthly 15-minute budget review lets you catch drift early. Miss a month's contribution? Adjust the timeline or find a one-time cut next month. The plan stays alive.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <blockquote>
+                    <p>"Do not save what is left after spending. Instead, spend what is left after saving."</p>
+                    <cite>— Warren Buffett</cite>
+                </blockquote>
+
+                <div class="cta-banner">
+                    <div>
+                        <h3>Ready to put this into practice?</h3>
+                        <p>Head to the Budget Tracker and start logging your first expense today.</p>
+                    </div>
+                    <a href="budget.html" class="cta-link">Open Budget Tracker →</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer-bar"></footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script>
+        firebase.initializeApp({
+            apiKey:            "AIzaSyDS5r7RaNUgOO4Q-koKj_7qhVknNhbSz8I",
+            authDomain:        "budget-bridge-dc5ab.firebaseapp.com",
+            projectId:         "budget-bridge-dc5ab",
+            storageBucket:     "budget-bridge-dc5ab.firebasestorage.app",
+            messagingSenderId: "685535098423",
+            appId:             "1:685535098423:web:5c8f388500524a3592b1b2"
+        });
+
+        document.getElementById('menuBtn').addEventListener('click', () => {
+            document.getElementById('sideMenu').classList.toggle('active');
+        });
+
+        firebase.auth().onAuthStateChanged(user => {
+            if (!user) { window.location.href = 'login.html'; return; }
+            document.getElementById('navUsername').textContent = user.displayName || 'User';
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', e => {
+            e.preventDefault();
+            firebase.auth().signOut().then(() => { window.location.href = 'index.html'; });
+        });
+    </script>
+</body>
+</html>
